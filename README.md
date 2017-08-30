@@ -35,7 +35,7 @@ export default{
     }
 }
 ```
-### Properties
+## Properties
 | Property | Default |
 |----------|---------|
 | placeholder | |یک تاریخ را انتخاب کنید|

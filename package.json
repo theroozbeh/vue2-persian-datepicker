@@ -1,6 +1,6 @@
 {
   "name": "vue2-persian-datepicker",
-  "version": "1.0.8",
+  "version": "1.0.11",
   "description": "Jalali datepicker for vue",
   "author": "Roozbeh Hajizadeh <hajizadeh.roozbeh@gmail.com>",
   "private": false,
@@ -12,8 +12,7 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
-    "vue": "^2.4.2",
-    "vue-router": "^2.7.0"
+    "vue": "^2.4.2"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
@@ -59,10 +58,29 @@
     "webpack-hot-middleware": "^2.18.0",
     "webpack-merge": "^4.1.0"
   },
+  "keywords": [
+    "vue",
+    "datepicker",
+    "jalali",
+    "persian",
+    "persian-datepicker",
+    "jalali-datepicker",
+    "picker",
+    "vuejs"
+  ],
+  "bugs": {
+    "url": "https://github.com/dyonir/vue2-persian-datepicker/issues"
+  },
+  "homepage": "https://github.com/dyonir/vue2-persian-datepicker#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dyonir/vue2-persian-datepicker.git"
+  },
   "engines": {
     "node": ">= 4.0.0",
     "npm": ">= 3.0.0"
   },
+  "license": "MIT",
   "browserslist": [
     "> 1%",
     "last 2 versions",
