@@ -1,10 +1,10 @@
-# vue-persian-datepicker
+# vue persian datepicker
 
 > This is a Jalali date picker component for Vue. 
 
 > این برنامه یک کامپوننت انتخاب تاریخ جلالی می باشد. 
 
-##Instalation
+## Instalation
 ```bash
 $ npm install vue2-persian-datepicker
 ```
