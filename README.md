@@ -17,7 +17,7 @@ You may use the component in your markup
 <pdatepicker v-on:selected='dateSelected' :value='date'></pdatepicker>
 ```
 
-‍‍‍‍```js
+```js
 export default{
     data(){
         return {
@@ -30,4 +30,13 @@ export default{
         }
     }
 }
-
+```
+### Properties
+| Property | Default |
+|----------|---------|
+| placeholder | |یک تاریخ را انتخاب کنید|
+| header-color | 'white' |
+| header-background-color | '#137e95' |
+| minimum-year | 1300 |
+| maximum-year | 1350 |
+| value | '' |
