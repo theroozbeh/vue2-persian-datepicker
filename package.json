@@ -1,9 +1,9 @@
 {
-  "name": "vue-persian-datepicker",
+  "name": "vue2-persian-datepicker",
   "version": "1.0.0",
-  "description": "A Vue.js project",
+  "description": "Jalali datepicker for vue",
   "author": "Roozbeh Hajizadeh <hajizadeh.roozbeh@gmail.com>",
-  "private": true,
+  "private": false,
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",
