@@ -12,8 +12,8 @@ $ npm install vue2-persian-datepicker
 ## How to use
 ```js
 import Vue from 'vue'
-import PDatePicker from 'PDatePicker'
-vue.component('pdatepicker', PDatePicker)
+import PDatePicker from 'vue2-persian-datepicker'
+Vue.component('pdatepicker', PDatePicker)
 ```
 
 You may use the component in your markup

@@ -11,17 +11,18 @@
                     </div>
                 </div>
                 <div class='dialog-week'>
-                    <div class='day-box day-name' v-for='dayName in dayNames'>{{ dayName }}</div>
+                    <div class='day-box day-name' v-for='dayName in dayNames'>
+                        {{ dayName }}
+                    </div>
                 </div>
                 <div class='dialog-days'>
-                    <div class='day-box empty-box' v-for='n in firstDayOfMonth'></div><div class='day-box'
-                                                                                           v-bind:class='{ chosenDay : ifDayBoxIsChosenDay(n) }'
-                                                                                           v-for='n in daysInMonth'
-                                                                                           @click='dayClicked(n)'>{{ n }}</div>
+                    <div class='day-box empty-box' v-for='n in firstDayOfMonth'></div><template v-for='n in daysInMonth'><div class='day-box'
+                            v-bind:class='{ chosenDay : ifDayBoxIsChosenDay(n) }'
+                            @click='dayClicked(n)'>{{ n }}</div><div class="endofweek" v-if="(firstDayOfMonth + n) % 7 == 0"></div></template>
                 </div>
             </div>
             <div class='year-view' v-if='isMonthView'>
-                <div class="dialog-header" v-bind:style='{background : header_backcolor, color: header_color}'>
+                <div class="dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
                     <div class='dialog-year'>
                         <div class="preYear" @click='preYearClicked'><</div>
                         <div class="cyear">{{ displayingYear }}</div>
@@ -29,10 +30,12 @@
                     </div>
                 </div>
                 <div class='dialog-months'>
-                    <div class='month-box'
-                        v-bind:class='{ chosenMonth : ifMonthBoxChosenMonth(i) }'
-                        v-for='(n, i) in monthNames'
-                        @click='monthClicked(i)'>{{ n }}</div>
+                    <template v-for='(n, i) in monthNames'>
+                        <div class="endofseason" v-if="i % 3 == 0"></div>
+                        <div class='month-box'
+                            v-bind:class='{ chosenMonth : ifMonthBoxChosenMonth(i) }'
+                            @click='monthClicked(i)'>{{ n }}</div>
+                    </template>
                 </div>
             </div>
         </div>
@@ -268,9 +271,8 @@ export default {
     }
     
     $width : 30px;
-    $month_box_width : $width * 9 / 3;
+    $month_box_width : $width * 7 / 3;
     .pdatepicker{
-        width: ($width + 13) * 8;
         position: relative;
         input{
             text-align: left;
@@ -284,6 +286,13 @@ export default {
                 width: 100%;
                 box-shadow: 0px 0px 5px 0px gray;
                 @include clearfix;
+            }
+            .endofweek, .endofseason{
+                padding: 0px;
+                margin: 0px;
+                width: 0px;
+                height: 0px;
+                @include clearfix();                       
             }
             .day-view{
                 .dialog-month{
@@ -319,6 +328,7 @@ export default {
                     padding:5px;
                     margin: 3px;
                     cursor: pointer;
+                    font-size: 12px;
                     @include hovarable();
                 }
                 .day-name{
@@ -330,7 +340,6 @@ export default {
                 }
             }
             .year-view{
-                width: ($width + 13) * 8;
                 text-align: center;
                 .dialog-year{
                     width: 100%;
