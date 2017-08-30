@@ -2,14 +2,14 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
-import router from './router'
 
 Vue.config.productionTip = false
 
+import PDatePicker from '@/components/PDatePicker'
+Vue.component('pdatepicker', PDatePicker);
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  router,
   template: '<App/>',
   components: { App }
 })

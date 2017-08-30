@@ -1,9 +1,9 @@
 <template>
     <div dir='rtl' class="pdatepicker">
-        <input type="text" @click="inputClicked" v-model='chosenDate' @change='chosenDateChanged'>
+        <input type="text" @click="inputClicked" v-model='chosenDate' @change='chosenDateChanged' :placeholder="placeholder">
         <div class='dialog' v-if='isDialogOpen'>
             <div class='day-view' v-if='isDayView'>
-                <div class="dialog-header" v-bind:style='{background : header_backcolor, color: header_color}'>
+                <div class="dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
                     <div class='dialog-month'>
                         <div class="preMonth" @click='preMonthClicked'><</div>
                         <div class="monthName"@click='monthNameClicked'>{{ displayingMonth }} {{ displayingYear }}</div>
@@ -43,6 +43,14 @@
 <script>
 export default {
   name : 'PDatePicker',
+  props : {'placeholder' : { default : 'یک تاریخ را انتخاب کنید'},
+                'headerBackgroundColor' :{ default : '#137e95' },
+                'headerColor' : { default : 'white'},
+                'minimumYear' : { default : 1300, type: Number},
+                'maximumYear' : { default : 1450, type: Number },
+                'value' : { default : '' }
+                
+  },
   data () {
     return {
         isDialogOpen : false,
@@ -58,9 +66,7 @@ export default {
         displayingMonth : '',
         displayingYear : 1300,
         dayOfWeek: 0,
-        header_backcolor: '#137e95',
-        header_color: 'white',
-        chosenDate: '',
+        chosenDate: this.value,
         chosenDay: 1,
         chosenMonth : 1,
         chosenYear : 1396
@@ -105,7 +111,7 @@ export default {
             this.chosenDay = this.gtoday[2];
             this.chosenMonth = this.gtoday[1];
             this.chosenYear = this.gtoday[0];
-            this.updateInput();
+            //this.updateInput();
         }
     },
     ifDayBoxIsChosenDay(day){
@@ -132,7 +138,8 @@ export default {
     },
     preMonthClicked(){
         this.displayingMonthNum--;
-        if(this.displayingMonthNum < 0) {
+        if(this.displayingMonthNum < 0 &&
+                this.displayingYear - 1 >= this.minimumYear) {
             this.displayingMonthNum = 11;
             this.displayingYear --;
         }
@@ -140,9 +147,10 @@ export default {
     },
     nextMonthClicked(){
         this.displayingMonthNum++;
-        if(this.displayingMonthNum > 11) {
+        if(this.displayingMonthNum > 11 &&
+                this.displayingYear + 1 <= this.maximumYear) {
             this.displayingMonthNum = 0;
-            this.displayingYear ++;
+            this.displayingYear++;
         }
         this.goToMonth(this.displayingYear, this.displayingMonthNum, 1);
         
@@ -163,12 +171,16 @@ export default {
     },
     updateInput(){
         this.chosenDate = this.chosenYear + "/" + this.chosenMonth + "/" + this.chosenDay;
+        this.value = this.chosenDate ;
+        this.$emit('selected', this.value);
     },
     nextYearClicked(){
-        this.displayingYear++;
+        if(this.displayingYear + 1 <= this.maximumYear) 
+            this.displayingYear++;
     },
     preYearClicked(){
-        this.displayingYear--;
+        if(this.displayingYear - 1 >= this.minimumYear) 
+            this.displayingYear--;
     },
     monthNameClicked(){
         this.isDayView = false;
