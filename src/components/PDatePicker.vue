@@ -46,13 +46,24 @@
 <script>
 export default {
   name : 'PDatePicker',
-  props : {'placeholder' : { default : 'یک تاریخ را انتخاب کنید'},
+  props : {'placeholder' : { default : 'یک تاریخ را انتخاب کنید', String},
                 'headerBackgroundColor' :{ default : '#137e95' },
                 'headerColor' : { default : 'white'},
                 'minimumYear' : { default : 1300, type: Number},
                 'maximumYear' : { default : 1450, type: Number },
-                'value' : { default : '' }
-                
+                'value' : { default : '' },
+                'name' : { default : '', type: String },
+                'required' : { default : false, Boolean },
+                'id' : { default : '', String},
+                'input-class': { default : '', String },
+                'dialog-class' :  {default : '', String },
+                'wrapper-class' :  {default : '', String },
+                'initial-view' : { default: 'day', String, 
+                        validator : function (value){
+                            return value === 'day' || value === 'month'
+                        }
+                    }
+                 
   },
   data () {
     return {
@@ -80,12 +91,16 @@ export default {
   },
   methods: {
     inputClicked () {
+        this.openDialog();
+    },
+    openDialog(){
         this.isDialogOpen = !this.isDialogOpen ;
         this.isDayView = true;
         this.isMonthView = false;
-    },
-    openDialog(){
-       
+        if(this.isDialogOpen)
+            this.$emit('opened', this.value);
+        else
+            this.$emit('closed', this.value);
     },
     chosenDateChanged(){
         let check = true;
@@ -116,6 +131,7 @@ export default {
             this.chosenYear = this.gtoday[0];
             //this.updateInput();
         }
+        this.$emit('input', this.value);
     },
     ifDayBoxIsChosenDay(day){
         return this.chosenYear === this.displayingYear &&
@@ -133,30 +149,41 @@ export default {
         this.firstDayOfMonth = (firstOfMonth.getDay()) %7 ;
         this.daysInMonth = this.gatDaysInMonth(month);
         this.displayingMonthNum = month;
+        
+        let yearch = this.displayingYear !== year;
+        let monthch = this.displayingMonth !== this.monthNames[month];
+        
         this.displayingYear = year;
         this.displayingMonth = this.monthNames[month];
+        
+        if(monthch)
+            this.$emit('monthChanged', this.value);
+        if(yearch)
+            this.$emit('yearChanged', this.value);
+        
     },
     gatDaysInMonth(monthNumber){
         return monthNumber <= 5 ? 31 : 30;
     },
     preMonthClicked(){
-        this.displayingMonthNum--;
-        if(this.displayingMonthNum < 0 &&
-                this.displayingYear - 1 >= this.minimumYear) {
-            this.displayingMonthNum = 11;
-            this.displayingYear --;
+        let newMonth = this.displayingMonthNum - 1;
+        let newYear = this.displayingYear;
+        if(newMonth < 0 &&
+                newYear - 1 >= this.minimumYear) {
+            newMonth = 11;
+            newYear--;
         }
-        this.goToMonth(this.displayingYear, this.displayingMonthNum, 1);
+        this.goToMonth(newYear, newMonth, 1);
     },
     nextMonthClicked(){
-        this.displayingMonthNum++;
-        if(this.displayingMonthNum > 11 &&
-                this.displayingYear + 1 <= this.maximumYear) {
-            this.displayingMonthNum = 0;
-            this.displayingYear++;
+        let newMonth = this.displayingMonthNum + 1;
+        let newYear = this.displayingYear;
+        if(newMonth < 0 &&
+                newYear - 1 >= this.minimumYear) {
+            newMonth = 11;
+            newYear--;
         }
-        this.goToMonth(this.displayingYear, this.displayingMonthNum, 1);
-        
+        this.goToMonth(newYear, newMonth, 1);
     },
     dayClicked(day){
         this.chosenDay = day;
@@ -166,7 +193,6 @@ export default {
         this.isDialogOpen = false;
     },
     monthClicked(month){
-        console.log(month);
         this.displayingMonthNum = month;
         this.isMonthView = false;
         this.isDayView = true;
@@ -178,17 +204,22 @@ export default {
         this.$emit('selected', this.value);
     },
     nextYearClicked(){
-        if(this.displayingYear + 1 <= this.maximumYear) 
+        if(this.displayingYear + 1 <= this.maximumYear) {
             this.displayingYear++;
+            this.$emit('yearChanged', this.value);
+        }
     },
     preYearClicked(){
-        if(this.displayingYear - 1 >= this.minimumYear) 
+        if(this.displayingYear - 1 >= this.minimumYear) { 
             this.displayingYear--;
+            this.$emit('yearChanged', this.value);
+        }
     },
     monthNameClicked(){
         this.isDayView = false;
         this.isMonthView = true;
         this.chosenMonth = this.displayingMonthNum + 1;
+        this.$emit('monthChanged', this.value);
     },
     gregorian_to_jalali( gy, gm, gd) {
         var g_d_m=[0,31,59,90,120,151,181,212,243,273,304,334];
