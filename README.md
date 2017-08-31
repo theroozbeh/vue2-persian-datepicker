@@ -46,19 +46,4 @@ export default{
 | value | '' |
 
 ## Get selected date
-Every time user selects a date `selected` event will be emitted. If you want to catch the new selected date you have to listen to this event.
-
-```js
-export default{
-    data(){
-        return {
-            date : '1396/6/8'
-        };
-    },
-    methods:{
-        dateSelected(value) {
-            this.date = value;
-        }
-    }
-}
-```
+Using v-model 

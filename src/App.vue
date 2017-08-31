@@ -1,7 +1,7 @@
 <template>
     <div id="app" dir="rtl">
         <img src="./assets/logo.png">
-        <pdatepicker :value='date' v-on:selected='dateSelected'></pdatepicker>
+        <pdatepicker v-model="date"></pdatepicker>
         <p>
         {{ date }}
         </p>
