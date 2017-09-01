@@ -291,7 +291,6 @@ export default {
         let elements = this.formatDate.split("/");
         let outYear = '' + elements[0] === "yyyy" ? year : year - 1300;
         let outMonth = '';
-        console.log(elements);
         if(elements[1] === 'M') outMonth = month;
         else if(elements[1] === 'MM'){
             if(month < 10) outMonth = '0' + month;
