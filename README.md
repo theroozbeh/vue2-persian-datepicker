@@ -74,7 +74,6 @@ Using v-model you can sync a value to selected date. Or, you can listen to selec
 There are several ways you can print selected date on user input. Keep in mind
 that you have to keep order of date (year/month/date)
 
-## Events
 | token | desc | example |
 |-------|------|-------------|
 | d | day | 3 |
