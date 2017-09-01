@@ -8,45 +8,47 @@
                :class="inputClass"
                :name="name"
                :placeholder="placeholder">
-        <div class='dialog' :class="dialogClass" v-if='isDialogOpen' v-bind:style="{ background: dialogBackColor, color: dialogColor}">
-            <div class='day-view' v-if='isDayView'>
-                <div class="dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
-                    <div class='dialog-month'>
-                        <div class="preMonth" @click='preMonthClicked'><</div>
-                        <div class="monthName"@click='monthNameClicked'>{{ displayingMonth }} {{ displayingYear }}</div>
-                        <div class="nextMonth" @click='nextMonthClicked'>></div>
+        <transition :name="openTransitionAnimation">
+            <div class='dialog' :class="dialogClass" v-if='isDialogOpen' v-bind:style="{ background: dialogBackColor, color: dialogColor}">
+            
+                <div class='day-view' v-if='isDayView'>
+                    <div class="dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
+                        <div class='dialog-month'>
+                            <div class="preMonth" @click='preMonthClicked'><</div>
+                            <div class="monthName"@click='monthNameClicked'>{{ displayingMonth }} {{ displayingYear }}</div>
+                            <div class="nextMonth" @click='nextMonthClicked'>></div>
+                        </div>
+                    </div>
+                    <div class='dialog-week'>
+                        <div class='day-box day-name' v-for='dayName in dayNames'>
+                            {{ dayName }}
+                        </div>
+                    </div>
+                    <div class='dialog-days'>
+                        <div class='day-box empty-box' v-for='n in firstDayOfMonth'></div><template v-for='n in daysInMonth'><div class='day-box'
+                                v-bind:class='{ chosenDay : ifDayBoxIsChosenDay(n) }'
+                                @click='dayClicked(n)'>{{ n }}</div><div class="endofweek" v-if="(firstDayOfMonth + n) % 7 == 0"></div></template>
                     </div>
                 </div>
-                <div class='dialog-week'>
-                    <div class='day-box day-name' v-for='dayName in dayNames'>
-                        {{ dayName }}
+                <div class='year-view' v-if='isMonthView'>
+                    <div class="dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
+                        <div class='dialog-year'>
+                            <div class="preYear" @click='preYearClicked'><</div>
+                            <div class="cyear">{{ displayingYear }}</div>
+                            <div class="nextYear" @click='nextYearClicked'>></div>
+                        </div>
                     </div>
-                </div>
-                <div class='dialog-days'>
-                    <div class='day-box empty-box' v-for='n in firstDayOfMonth'></div><template v-for='n in daysInMonth'><div class='day-box'
-                            v-bind:class='{ chosenDay : ifDayBoxIsChosenDay(n) }'
-                            @click='dayClicked(n)'>{{ n }}</div><div class="endofweek" v-if="(firstDayOfMonth + n) % 7 == 0"></div></template>
+                    <div class='dialog-months'>
+                        <template v-for='(n, i) in monthNames'>
+                            <div class="endofseason" v-if="i % 3 == 0"></div>
+                            <div class='month-box'
+                                v-bind:class='{ chosenMonth : ifMonthBoxChosenMonth(i) }'
+                                @click='monthClicked(i)'>{{ n }}</div>
+                        </template>
+                    </div>
                 </div>
             </div>
-            <div class='year-view' v-if='isMonthView'>
-                <div class="dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
-                    <div class='dialog-year'>
-                        <div class="preYear" @click='preYearClicked'><</div>
-                        <div class="cyear">{{ displayingYear }}</div>
-                        <div class="nextYear" @click='nextYearClicked'>></div>
-                    </div>
-                </div>
-                <div class='dialog-months'>
-                    <template v-for='(n, i) in monthNames'>
-                        <div class="endofseason" v-if="i % 3 == 0"></div>
-                        <div class='month-box'
-                            v-bind:class='{ chosenMonth : ifMonthBoxChosenMonth(i) }'
-                            @click='monthClicked(i)'>{{ n }}</div>
-                    </template>
-                </div>
-            </div>
-        </div>
-      
+        </transition>
   </div>
 </template>
 
@@ -82,7 +84,8 @@ export default {
                             if(elements[2] !== "d" && elements[2] !== "dd") return false;
                             return true;
                         }
-                    }
+                    },
+                'openTransitionAnimation' : { default: 'slide-fade' , String }
   },
   data () {
     return {
@@ -164,11 +167,7 @@ export default {
                     if(month > 6 && (day < 1 || day > 30)) return;
                     if(year < 1300) year += 1300;
                     if(year < this.minimumYear || year > this.maximumYear) return;
-//                    this.chosenDay = day;
-//                    this.chosenMonth =  month;
-//                    this.chosenYear = year;
                     this.goToMonth(year, month - 1, day);
-//                    this.dayClicked(day);
                     this.updateInput();
                     this.dayClicked(day);
                     check = false;
@@ -498,5 +497,23 @@ export default {
                  position: static;
             }
         }
+    }
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .5s
+    }
+    .fade-enter, .fade-leave-to {
+        opacity: 0
+    }
+    
+    .slide-fade-enter-active {
+        transition: all .3s ease-out;
+    }
+    .slide-fade-leave-active {
+        transition: all .8s ease-out;
+    }
+    .slide-fade-enter, .slide-fade-leave-to
+    {
+        transform: translateY(-10px);
+        opacity: 0;
     }
 </style>
