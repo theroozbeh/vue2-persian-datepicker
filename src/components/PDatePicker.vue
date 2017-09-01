@@ -1,9 +1,10 @@
 <template>
-    <div dir='rtl' class="pdatepicker" v-bind:class="{ 'inline' : inlineMode, wrapperClass }">
+    <div class="pdatepicker" v-bind:class="{ 'inline' : inlineMode, wrapperClass }"
+               >
         <input type="text"
                @click="inputClicked"
-               v-model='chosenDate'
-               @change='chosenDateChanged'
+               :value="formatedChosenDate"
+               @change="inputChanged($event.target.value)"
                :class="inputClass"
                :name="name"
                :placeholder="placeholder">
@@ -53,26 +54,35 @@
 export default {
   name : 'PDatePicker',
   props : {'placeholder' : { default : 'یک تاریخ را انتخاب کنید', String},
-                    'headerBackgroundColor' :{ default : '#137e95' },
-                    'headerColor' : { default : 'white'},
-                    'dialogColor' : { default : '' },
-                    'dialogBackColor' : { default : ''},
-                    'minimumYear' : { default : 1300, type: Number},
-                    'maximumYear' : { default : 1450, type: Number },
-                    'value' : { default : '' },
-                    'name' : { default : '', type: String },
-                    'required' : { default : false, Boolean },
-                    'id' : { default : '', String},
-                    'inputClass': { default : '', String },
-                    'dialogClass' :  {default : '', String },
-                    'wrapperClass' :  {default : '', String },
-                    'initialView' : { default: 'day', String, 
-                            validator : function (value){
-                                return value === 'day' || value === 'month'
-                            }
-                        },
-                    'inlineMode' : { default : false, Boolean }
-                 
+                'headerBackgroundColor' :{ default : '#137e95' },
+                'headerColor' : { default : 'white'},
+                'dialogColor' : { default : '' },
+                'dialogBackColor' : { default : ''},
+                'minimumYear' : { default : 1300, type: Number},
+                'maximumYear' : { default : 1450, type: Number },
+                'value' : { default : '' },
+                'name' : { default : '', type: String },
+                'required' : { default : false, Boolean },
+                'id' : { default : '', String},
+                'inputClass': { default : '', String },
+                'dialogClass' :  {default : '', String },
+                'wrapperClass' :  {default : '', String },
+                'initialView' : { default: 'day', String, 
+                        validator (value){
+                            return value === 'day' || value === 'month'
+                        }
+                    },
+                'inlineMode' : { default : false, Boolean },
+                'formatDate' : { default: 'yyyy/MM/dd', String, 
+                        validator (value) {
+                            let elements = value.split("/");
+                            if(elements.length !== 3) return false;
+                            if(elements[0] !== "yyyy" && elements[0] !== "yy") return false;
+                            if(elements[1] !== "M" && elements[1] !== "MM" && elements[1] !== "MMM") return false;
+                            if(elements[2] !== "d" && elements[2] !== "dd") return false;
+                            return true;
+                        }
+                    }
   },
   data () {
     return {
@@ -89,28 +99,40 @@ export default {
         displayingMonth : '',
         displayingYear : 1300,
         dayOfWeek: 0,
-        chosenDate : this.value,
+        chosenDate : '',
+        formatedChosenDate : '',
         chosenDay: 1,
         chosenMonth : 1,
         chosenYear : 1396
     }
   },
   mounted(){
-    this.chosenDateChanged();  
+    if(this.value === ''){
+        this.inputChanged(this.value);
+    } else {
+        this.goToToday();  
+    }
     if(this.inlineMode){
         this.openDialog();
     }
   },
   methods: {
     inputClicked () {
-        this.openDialog();
+        if(!this.isDialogOpen)
+            this.openDialog();
+        else
+            this.closeDialog();
     },
     hasInputClass(){
         return inputClass !== '';
     },
+    inputBlured(){
+        this.closeDialog();
+    },
     openDialog(){
+        if(this.isDialogOpen) return;
         this.isDialogOpen = true;
-        if(this.initialView == 'day'){
+        if(this.initialView === 'day'){
             this.isDayView = true;
             this.isMonthView = false;
         } else {
@@ -125,36 +147,37 @@ export default {
             this.$emit('closed', this.value);
         }
     },
-    chosenDateChanged(){
+    inputChanged(value){
         let check = true;
-        if(this.chosenDate !== ''){
-            var els = this.chosenDate.split("/");
+        if(value !== ''){
+            var els = value.split("/");
             if(els.length === 3){
                 let year = parseInt(els[0]);
                 let month = parseInt(els[1]);
                 let day = parseInt(els[2]);
-                console.log(year, month, day);
-                if(!isNaN(year) && !isNaN(month) && !isNaN(day)){
+                if(isNaN(month)){
+                    month = this.monthNames.indexOf(els[1]) + 1;
+                } 
+                if(!isNaN(year) && !isNaN(day) && month !== -1){
+                    if(month < 1 || month > 12) return;
+                    if(month <= 6 && (day < 1 || day > 31)) return;
+                    if(month > 6 && (day < 1 || day > 30)) return;
                     if(year < 1300) year += 1300;
+                    if(year < this.minimumYear || year > this.maximumYear) return;
+//                    this.chosenDay = day;
+//                    this.chosenMonth =  month;
+//                    this.chosenYear = year;
                     this.goToMonth(year, month - 1, day);
-                    this.chosenDay = day;
-                    this.chosenMonth = month;
-                    this.chosenYear = year;
+//                    this.dayClicked(day);
+                    this.updateInput();
+                    this.dayClicked(day);
                     check = false;
-                    
                 }
             }
         }
         if(check){
-            let today = new Date();
-            this.gtoday = this.gregorian_to_jalali(today.getFullYear(), today.getMonth() + 1, today.getDate());
-            this.goToMonth(this.gtoday[0], this.gtoday[1] - 1, this.gtoday[2]);
-            this.chosenDay = this.gtoday[2];
-            this.chosenMonth = this.gtoday[1];
-            this.chosenYear = this.gtoday[0];
-            //this.updateInput();
         }
-        this.$emit('input', this.value);
+//        this.$emit('input', this.value);
     },
     ifDayBoxIsChosenDay(day){
         return this.chosenYear === this.displayingYear &&
@@ -166,7 +189,13 @@ export default {
                 this.chosenMonth === month + 1;
     },
     goToToday(){
-        
+        let today = new Date();
+        this.gtoday = this.gregorian_to_jalali(today.getFullYear(), today.getMonth() + 1, today.getDate());
+        this.goToMonth(this.gtoday[0], this.gtoday[1] - 1, this.gtoday[2]);
+        this.chosenDay = this.gtoday[2];
+        this.chosenMonth = this.gtoday[1];
+        this.chosenYear = this.gtoday[0];
+        this.goToMonth(this.chosenYear, this.chosenMonth, this.chosenDay);
     },
     goToMonth(year, month, day){
         var gfirstOfMonth = this.jalali_to_gregorian(year, month + 1, 1);
@@ -226,8 +255,9 @@ export default {
     },
     updateInput(){
         this.chosenDate = this.chosenYear + "/" + this.chosenMonth + "/" + this.chosenDay;
-        this.value = this.chosenDate ;
-        this.$emit('selected', this.value);
+        this.formatedChosenDate = this.toFormatDate(this.chosenYear, this.chosenMonth, this.chosenDay);
+        this.$emit('selected', this.chosenDate);
+        this.$emit('input', this.chosenDate);
     },
     nextYearClicked(){
         if(this.displayingYear + 1 <= this.maximumYear) {
@@ -246,6 +276,26 @@ export default {
         this.isMonthView = true;
         this.chosenMonth = this.displayingMonthNum + 1;
         this.$emit('monthChanged', this.value);
+    },
+    toFormatDate(year, month, day){
+        let elements = this.formatDate.split("/");
+        let outYear = '' + elements[0] === "yyyy" ? year : year - 1300;
+        let outMonth = '';
+        if(elements[1] === 'M') outMonth = month;
+        else if(elements[1] === 'MM'){
+            if(month < 10) outMonth = '0' + month;
+            else outMonth =  month;
+        }
+        else if(elements[1] === 'MMM') outMonth = this.monthNames[month];
+        let outDay = elements[2] === 'dd' && day < 10 ? '0' + day : day;
+        return outYear + "/" + outMonth + "/" + outDay;
+    },
+    replaceAllArray(str, find, replace){
+        let replacedStr = str;
+        for(let i=0; i<replacedStr; i++){
+            replacedStr = replacedStr.replace(find[i], replace[i]);
+        }
+        return replaceStr;
     },
     gregorian_to_jalali( gy, gm, gd) {
         var g_d_m=[0,31,59,90,120,151,181,212,243,273,304,334];
