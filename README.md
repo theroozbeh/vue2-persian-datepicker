@@ -69,3 +69,18 @@ export default{
   
 ## Get selected date
 Using v-model you can sync a value to selected date. Or, you can listen to selected event and get selected date.
+
+## Date formatting
+There are several ways you can print selected date on user input. Keep in mind
+that you have to keep order of date (year/month/date)
+
+## Events
+| token | desc | exampl |
+|-------|------|-------------|
+| d | day | 3 |
+| dd | day with 0 prefixed day | 03 |
+| M | month number | 4 |
+| MM | month with 0 prefix day | 04 |
+| MMM | month name | فروردین |
+| yy | two digits year | 96 |
+| yyyy | four digits year | 1396 |
