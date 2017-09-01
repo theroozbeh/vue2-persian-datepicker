@@ -1,7 +1,8 @@
 <template>
     <div class="pdatepicker" v-bind:class="{ 'inline' : inlineMode, wrapperClass }"
                >
-        <input type="text"
+        <input :id="id"
+            type="text"
                @click="inputClicked"
                :value="formatedChosenDate"
                @change="inputChanged($event.target.value)"
@@ -58,8 +59,8 @@ export default {
   props : {'placeholder' : { default : 'یک تاریخ را انتخاب کنید', String},
                 'headerBackgroundColor' :{ default : '#137e95' },
                 'headerColor' : { default : 'white'},
-                'dialogColor' : { default : '' },
-                'dialogBackColor' : { default : ''},
+                'dialogColor' : { default : 'black' },
+                'dialogBackColor' : { default : '#fafafa'},
                 'minimumYear' : { default : 1300, type: Number},
                 'maximumYear' : { default : 1450, type: Number },
                 'value' : { default : '' },
@@ -85,7 +86,8 @@ export default {
                             return true;
                         }
                     },
-                'openTransitionAnimation' : { default: 'slide-fade' , String }
+                'openTransitionAnimation' : { default: 'slide-fade' , String },
+                'persianDigits' : { default : true, String }
   },
   data () {
     return {
@@ -110,7 +112,7 @@ export default {
     }
   },
   mounted(){
-    if(this.value === ''){
+    if(this.value !== ''){
         this.inputChanged(this.value);
     } else {
         this.goToToday();  
@@ -150,33 +152,41 @@ export default {
             this.$emit('closed', this.value);
         }
     },
-    inputChanged(value){
-        let check = true;
+    inputCheck(value){
         if(value !== ''){
-            var els = value.split("/");
+            let els = value.split("/");
             if(els.length === 3){
-                let year = parseInt(els[0]);
-                let month = parseInt(els[1]);
-                let day = parseInt(els[2]);
+                let year = parseInt(this.convertDigitsPTE(els[0]));
+                let month = parseInt(this.convertDigitsPTE(els[1]));
+                let day = parseInt(this.convertDigitsPTE(els[2]));
                 if(isNaN(month)){
                     month = this.monthNames.indexOf(els[1]) + 1;
                 } 
                 if(!isNaN(year) && !isNaN(day) && month !== -1){
-                    if(month < 1 || month > 12) return;
-                    if(month <= 6 && (day < 1 || day > 31)) return;
-                    if(month > 6 && (day < 1 || day > 30)) return;
+                    if(month < 1 || month > 12) return false;
+                    if(month <= 6 && (day < 1 || day > 31)) return false;
+                    if(month > 6 && (day < 1 || day > 30)) return false;
                     if(year < 1300) year += 1300;
-                    if(year < this.minimumYear || year > this.maximumYear) return;
-                    this.goToMonth(year, month - 1, day);
-                    this.updateInput();
-                    this.dayClicked(day);
-                    check = false;
+                    if(year < this.minimumYear || year > this.maximumYear) return false;
+                    return true;
                 }
             }
         }
-        if(check){
+        return false;
+    },
+    inputChanged(value){
+        if(this.inputCheck(value)) {  
+            let els = value.split("/");
+            let year = parseInt(this.convertDigitsPTE(els[0]));
+            let month = parseInt(this.convertDigitsPTE(els[1]));
+            let day = parseInt(this.convertDigitsPTE(els[2]));
+            if(isNaN(month)){
+                month = this.monthNames.indexOf(els[1]) + 1;
+            }
+            this.goToMonth(year, month - 1, day);
+            this.updateInput();
+            this.dayClicked(day);
         }
-//        this.$emit('input', this.value);
     },
     ifDayBoxIsChosenDay(day){
         return this.chosenYear === this.displayingYear &&
@@ -189,7 +199,7 @@ export default {
     },
     goToToday(){
         let today = new Date();
-        this.gtoday = this.gregorian_to_jalali(today.getFullYear(), today.getMonth() + 1, today.getDate());
+        this.gtoday = this.gregorian_to_jalali(today.getFullYear(), today.getMonth(), today.getDate());
         this.goToMonth(this.gtoday[0], this.gtoday[1] - 1, this.gtoday[2]);
         this.chosenDay = this.gtoday[2];
         this.chosenMonth = this.gtoday[1];
@@ -254,7 +264,11 @@ export default {
     },
     updateInput(){
         this.chosenDate = this.chosenYear + "/" + this.chosenMonth + "/" + this.chosenDay;
-        this.formatedChosenDate = this.toFormatDate(this.chosenYear, this.chosenMonth, this.chosenDay);
+        let str = this.toFormatDate(this.chosenYear, this.chosenMonth, this.chosenDay);
+        if(this.persianDigits)
+            this.formatedChosenDate = this.convertDigitsETP(str);
+        else
+            this.formatedChosenDate = this.convertDigitsPTE(str);
         this.$emit('selected', this.chosenDate);
         this.$emit('input', this.chosenDate);
     },
@@ -280,6 +294,7 @@ export default {
         let elements = this.formatDate.split("/");
         let outYear = '' + elements[0] === "yyyy" ? year : year - 1300;
         let outMonth = '';
+        console.log(elements);
         if(elements[1] === 'M') outMonth = month;
         else if(elements[1] === 'MM'){
             if(month < 10) outMonth = '0' + month;
@@ -289,12 +304,32 @@ export default {
         let outDay = elements[2] === 'dd' && day < 10 ? '0' + day : day;
         return outYear + "/" + outMonth + "/" + outDay;
     },
+    /**
+     * This function convert english digits to persian ones.
+     * @param {String} unconverted string
+     * @returns {String} converted string
+     */
+    convertDigitsPTE(str){
+      return this.replaceAllArray(str,
+        ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'],
+        ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']);
+    },
+    /**
+     * This function convert persian digits to english ones.
+     * @param {String} unconverted string
+     * @returns {String} converted string
+     */
+    convertDigitsETP(str){
+      return this.replaceAllArray(str,
+        ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
+        ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹']);
+    },
     replaceAllArray(str, find, replace){
         let replacedStr = str;
-        for(let i=0; i<replacedStr; i++){
-            replacedStr = replacedStr.replace(find[i], replace[i]);
+        for(let i=0; i<find.length; i++){
+            replacedStr = replacedStr.split(find[i]).join(replace[i]);
         }
-        return replaceStr;
+        return replacedStr;
     },
     gregorian_to_jalali( gy, gm, gd) {
         var g_d_m=[0,31,59,90,120,151,181,212,243,273,304,334];

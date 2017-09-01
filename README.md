@@ -36,14 +36,26 @@ export default{
 }
 ```
 ## Properties
-| Property | Default |
-|----------|---------|
-| placeholder | |یک تاریخ را انتخاب کنید|
-| header-color | 'white' |
-| header-background-color | '#137e95' |
-| minimum-year | 1300 |
-| maximum-year | 1350 |
-| value | '' |
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| placeholder | String | | Place holder of input |
+| header-color | Color | 'white' | Header text color |
+| header-background-color | Color | '#137e95' | Header background color |
+| dialog-color | 'black' || Color  Dialog text color |
+| dialog-background-color | Color | '#fafafa' | Dialog background color |
+| minimum-year | Number | 1300 | Minimum selectable year for user |
+| maximum-year | Number | 1350 | Maximum selectable year for user |
+| name | String | '' | Name element for normal http form submit |
+| required | Boolean | false | value of HTML required attribute |
+| id | String | '' | value of input's id attribute|
+| input-class | String | '' | css class for input element |
+| dialog class | String | '' | css class for dialog element |
+| wrapper-class | String | '' | css class wrapper element of component |
+| initial-view | String | 'day' | Initial view of component (month or day) |
+| inline-mode | Boolean | false | inline mode |
+| format-date | String | 'yyyy/MM/dd' | formats output date. order of date element should not change |
+| open-transition-animation | String | 'slide-fade' | you can specify a transition for opening and closing dialog.|
+| persianDigits |Boolean | true | outputs persian or english digits |
 
 ## Get selected date
 Using v-model 

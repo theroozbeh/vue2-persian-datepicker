@@ -1,7 +1,7 @@
 <template>
     <div id="app" dir="rtl">
         <img src="./assets/logo.png">
-        <pdatepicker v-model="date" format-date="yyyy/MM/dd"></pdatepicker>
+        <pdatepicker v-model="date" format-date="yyyy/MMM/dd"></pdatepicker>
         <p>
         {{ date }}
         </p>
@@ -13,7 +13,7 @@ export default {
   name: 'app',
   data () {
       return {
-          date : '1'
+          date : '12'
       }
   },
   methods: {
