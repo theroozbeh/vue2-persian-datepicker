@@ -1,6 +1,5 @@
 <template>
-    <div dir='rtl' class="pdatepicker"
-               :class="wrapperClass">
+    <div dir='rtl' class="pdatepicker" v-bind:class="{ 'inline' : inlineMode, wrapperClass }">
         <input type="text"
                @click="inputClicked"
                v-model='chosenDate'
@@ -54,24 +53,25 @@
 export default {
   name : 'PDatePicker',
   props : {'placeholder' : { default : 'یک تاریخ را انتخاب کنید', String},
-                'headerBackgroundColor' :{ default : '#137e95' },
-                'headerColor' : { default : 'white'},
-                'dialogColor' : { default : '' },
-                'dialogBackColor' : { default : ''},
-                'minimumYear' : { default : 1300, type: Number},
-                'maximumYear' : { default : 1450, type: Number },
-                'value' : { default : '' },
-                'name' : { default : '', type: String },
-                'required' : { default : false, Boolean },
-                'id' : { default : '', String},
-                'inputClass': { default : '', String },
-                'dialogClass' :  {default : '', String },
-                'wrapperClass' :  {default : '', String },
-                'initialView' : { default: 'day', String, 
-                        validator : function (value){
-                            return value === 'day' || value === 'month'
-                        }
-                    }
+                    'headerBackgroundColor' :{ default : '#137e95' },
+                    'headerColor' : { default : 'white'},
+                    'dialogColor' : { default : '' },
+                    'dialogBackColor' : { default : ''},
+                    'minimumYear' : { default : 1300, type: Number},
+                    'maximumYear' : { default : 1450, type: Number },
+                    'value' : { default : '' },
+                    'name' : { default : '', type: String },
+                    'required' : { default : false, Boolean },
+                    'id' : { default : '', String},
+                    'inputClass': { default : '', String },
+                    'dialogClass' :  {default : '', String },
+                    'wrapperClass' :  {default : '', String },
+                    'initialView' : { default: 'day', String, 
+                            validator : function (value){
+                                return value === 'day' || value === 'month'
+                            }
+                        },
+                    'inlineMode' : { default : false, Boolean }
                  
   },
   data () {
@@ -89,7 +89,7 @@ export default {
         displayingMonth : '',
         displayingYear : 1300,
         dayOfWeek: 0,
-        chosenDate: this.value,
+        chosenDate : this.value,
         chosenDay: 1,
         chosenMonth : 1,
         chosenYear : 1396
@@ -97,6 +97,9 @@ export default {
   },
   mounted(){
     this.chosenDateChanged();  
+    if(this.inlineMode){
+        this.openDialog();
+    }
   },
   methods: {
     inputClicked () {
@@ -106,7 +109,7 @@ export default {
         return inputClass !== '';
     },
     openDialog(){
-        this.isDialogOpen = !this.isDialogOpen ;
+        this.isDialogOpen = true;
         if(this.initialView == 'day'){
             this.isDayView = true;
             this.isMonthView = false;
@@ -114,10 +117,13 @@ export default {
             this.isDayView = false;
             this.isMonthView = true;
         }
-        if(this.isDialogOpen)
-            this.$emit('opened', this.value);
-        else
+        this.$emit('opened', this.value);
+    },
+    closeDialog(){
+        if(!this.inlineMode){
+            this.isDialogOpen = false;
             this.$emit('closed', this.value);
+        }
     },
     chosenDateChanged(){
         let check = true;
@@ -158,6 +164,9 @@ export default {
     ifMonthBoxChosenMonth(month){
         return this.chosenYear === this.displayingYear &&
                 this.chosenMonth === month + 1;
+    },
+    goToToday(){
+        
     },
     goToMonth(year, month, day){
         var gfirstOfMonth = this.jalali_to_gregorian(year, month + 1, 1);
@@ -207,7 +216,7 @@ export default {
         this.chosenMonth = this.displayingMonthNum + 1;
         this.chosenYear = this.displayingYear;
         this.updateInput();
-        this.isDialogOpen = false;
+        this.closeDialog();
     },
     monthClicked(month){
         this.displayingMonthNum = month;
@@ -310,6 +319,7 @@ export default {
         &:hover{
             background-color: rgba(200, 200, 200, 0.6);
         }
+                position: relative !important;
     }
     @mixin unhovarable(){
         cursor: default;
@@ -332,6 +342,7 @@ export default {
             box-shadow: 0px 0px 2px 0px gray;
             background-color: #fafafa;
             z-index: 100000;
+            
             .dialog-header{
                 width: 100%;
                 box-shadow: 0px 0px 5px 0px gray;
@@ -429,6 +440,12 @@ export default {
             }
             .chosenDay, .chosenMonth{
                 background-color: lightgray;
+            }
+        }
+        &.inline{
+            display: inline-block;
+            .dialog{
+                 position: static;
             }
         }
     }
