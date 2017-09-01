@@ -112,7 +112,7 @@ export default {
     }
   },
   mounted(){
-    if(this.value !== ''){
+    if(this.inputCheck(this.value)){
         this.inputChanged(this.value);
     } else {
         this.goToToday();  
@@ -130,9 +130,6 @@ export default {
     },
     hasInputClass(){
         return inputClass !== '';
-    },
-    inputBlured(){
-        this.closeDialog();
     },
     openDialog(){
         if(this.isDialogOpen) return;
@@ -300,7 +297,7 @@ export default {
             if(month < 10) outMonth = '0' + month;
             else outMonth =  month;
         }
-        else if(elements[1] === 'MMM') outMonth = this.monthNames[month];
+        else if(elements[1] === 'MMM') outMonth = this.monthNames[month - 1];
         let outDay = elements[2] === 'dd' && day < 10 ? '0' + day : day;
         return outYear + "/" + outMonth + "/" + outDay;
     },
