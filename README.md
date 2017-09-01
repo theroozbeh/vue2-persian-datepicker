@@ -57,5 +57,15 @@ export default{
 | open-transition-animation | String | 'slide-fade' | you can specify a transition for opening and closing dialog.|
 | persianDigits |Boolean | true | outputs persian or english digits |
 
+## Events
+| event | date | description |
+|-------|------|-------------|
+| opened || The picker's dialog is opened |
+| closed || The picker's dialog is closed |
+| monthChanged || Month page has changed |
+| yearChanged || Year page has changed |
+| selected | Date | A date has been selected |
+| input | Date | Input changed |
+  
 ## Get selected date
-Using v-model 
+Using v-model you can sync a value to selected date. Or, you can listen to selected event and get selected date.
