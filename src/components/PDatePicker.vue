@@ -1,7 +1,14 @@
 <template>
-    <div dir='rtl' class="pdatepicker">
-        <input type="text" @click="inputClicked" v-model='chosenDate' @change='chosenDateChanged' :placeholder="placeholder">
-        <div class='dialog' v-if='isDialogOpen'>
+    <div dir='rtl' class="pdatepicker"
+               :class="wrapperClass">
+        <input type="text"
+               @click="inputClicked"
+               v-model='chosenDate'
+               @change='chosenDateChanged'
+               :class="inputClass"
+               :name="name"
+               :placeholder="placeholder">
+        <div class='dialog' :class="dialogClass" v-if='isDialogOpen' v-bind:style="{ background: dialogBackColor, color: dialogColor}">
             <div class='day-view' v-if='isDayView'>
                 <div class="dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
                     <div class='dialog-month'>
@@ -49,16 +56,18 @@ export default {
   props : {'placeholder' : { default : 'یک تاریخ را انتخاب کنید', String},
                 'headerBackgroundColor' :{ default : '#137e95' },
                 'headerColor' : { default : 'white'},
+                'dialogColor' : { default : '' },
+                'dialogBackColor' : { default : ''},
                 'minimumYear' : { default : 1300, type: Number},
                 'maximumYear' : { default : 1450, type: Number },
                 'value' : { default : '' },
                 'name' : { default : '', type: String },
                 'required' : { default : false, Boolean },
                 'id' : { default : '', String},
-                'input-class': { default : '', String },
-                'dialog-class' :  {default : '', String },
-                'wrapper-class' :  {default : '', String },
-                'initial-view' : { default: 'day', String, 
+                'inputClass': { default : '', String },
+                'dialogClass' :  {default : '', String },
+                'wrapperClass' :  {default : '', String },
+                'initialView' : { default: 'day', String, 
                         validator : function (value){
                             return value === 'day' || value === 'month'
                         }
@@ -93,10 +102,18 @@ export default {
     inputClicked () {
         this.openDialog();
     },
+    hasInputClass(){
+        return inputClass !== '';
+    },
     openDialog(){
         this.isDialogOpen = !this.isDialogOpen ;
-        this.isDayView = true;
-        this.isMonthView = false;
+        if(this.initialView == 'day'){
+            this.isDayView = true;
+            this.isMonthView = false;
+        } else {
+            this.isDayView = false;
+            this.isMonthView = true;
+        }
         if(this.isDialogOpen)
             this.$emit('opened', this.value);
         else
@@ -313,6 +330,8 @@ export default {
             position: absolute;
             border: 1px solid gray;
             box-shadow: 0px 0px 2px 0px gray;
+            background-color: #fafafa;
+            z-index: 100000;
             .dialog-header{
                 width: 100%;
                 box-shadow: 0px 0px 5px 0px gray;
