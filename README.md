@@ -38,7 +38,7 @@ export default{
 ## Properties
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| placeholder | String | | Place holder of input |
+| placeholder | String | یک تاریخ را انتخاب کنید | Place holder of input |
 | header-color | Color | 'white' | Header text color |
 | header-background-color | Color | '#137e95' | Header background color |
 | dialog-color | 'black' || Color  Dialog text color |
@@ -75,7 +75,7 @@ There are several ways you can print selected date on user input. Keep in mind
 that you have to keep order of date (year/month/date)
 
 ## Events
-| token | desc | exampl |
+| token | desc | example |
 |-------|------|-------------|
 | d | day | 3 |
 | dd | day with 0 prefixed day | 03 |
