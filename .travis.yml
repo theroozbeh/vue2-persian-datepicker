@@ -4,5 +4,6 @@ node_js:
   - "7"
   - "6"
   - "5"
+after_script: "cat ./test/unit/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
 after_success:
   - codeclimate-test-reporter < ./test/unit/coverage/lcov.info
