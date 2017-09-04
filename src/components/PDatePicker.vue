@@ -20,15 +20,14 @@
                             <div class="nextMonth" @click='nextMonthClicked'>></div>
                         </div>
                     </div>
-                    <div class='dialog-week'>
-                        <div class='day-box day-name' v-for='dayName in dayNames'>
-                            {{ dayName }}
-                        </div>
-                    </div>
+                        
                     <div class='dialog-days'>
-                        <div class='day-box empty-box' v-for='n in firstDayOfMonth'></div><template v-for='n in daysInMonth'><div class='day-box'
+                        <span class='day-box day-name' v-for='dayName in dayNames'>
+                            {{ dayName }}
+                        </span>
+                        <span class='day-box empty-box' v-for='n in firstDayOfMonth'></span><template v-for='n in daysInMonth'><span class='day-box'
                                 v-bind:class='{ chosenDay : ifDayBoxIsChosenDay(n) }'
-                                @click='dayClicked(n)'>{{ n }}</div><div class="endofweek" v-if="(firstDayOfMonth + n) % 7 == 0"></div></template>
+                                @click='dayClicked(n)'>{{ n }}</span></template>
                     </div>
                 </div>
                 <div class='year-view' v-if='isMonthView'>
@@ -41,7 +40,6 @@
                     </div>
                     <div class='dialog-months'>
                         <template v-for='(n, i) in monthNames'>
-                            <div class="endofseason" v-if="i % 3 == 0"></div>
                             <div class='month-box'
                                 v-bind:class='{ chosenMonth : ifMonthBoxChosenMonth(i) }'
                                 @click='monthClicked(i)'>{{ n }}</div>
@@ -395,23 +393,16 @@ export default {
           clear: both;
         }
     }
-    @mixin hovarable(){
-        &:hover{
-            background-color: rgba(200, 200, 200, 0.6);
-        }
-                position: relative !important;
-    }
-    @mixin unhovarable(){
-        cursor: default;
-        &:hover{
-            background-color: inherit;
-        }
-    }
+    $dialog-width: 300px;
+    $box-width : $dialog-width / 7;
+    $month_box_width : $dialog-width / 3;
     
-    $width : 30px;
-    $month_box_width : $width * 7 / 3;
     .pdatepicker{
         position: relative;
+        display: inline-block;
+        * {
+            box-sizing: border-box;
+        }
         input{
             text-align: left;
             direction: rtl;
@@ -422,7 +413,7 @@ export default {
             box-shadow: 0px 0px 2px 0px gray;
             background-color: #fafafa;
             z-index: 100000;
-            
+            width: $dialog-width + 2;
             .dialog-header{
                 width: 100%;
                 box-shadow: 0px 0px 5px 0px gray;
@@ -436,6 +427,7 @@ export default {
                 @include clearfix();                       
             }
             .day-view{
+                text-align: right;
                 .dialog-month{
                     width: 100%;
                     div{
@@ -443,41 +435,58 @@ export default {
                         text-align: center;
                         padding: 10px 0;
                         cursor: pointer;
-                        @include hovarable();
                     }
                     .nextMonth{
                         float: right;
                         width: 10%;
+                        &:hover{
+                            background-color: rgba(200, 200, 200, 0.6);
+                        }
                     }
                     .preMonth{
                         float: right;
                         width: 10%;
+                        &:hover{
+                            background-color: rgba(200, 200, 200, 0.6);
+                        }
                     }
                     .monthName{
                         float: right;
                         width: 80%;
+                        &:hover{
+                            background-color: rgba(200, 200, 200, 0.6);
+                        }
                     }
                 }
                 .dialog-week{
                     width: 100%;
                 }
                 .day-box{
-                    width: $width;
+                    width: $box-width;
+                    line-height: $box-width;
                     display: inline-block;
                     text-align: center;
                     border: 1px solid transparent;
-                    padding:5px;
-                    margin: 3px;
+                    padding:0 5px;
                     cursor: pointer;
-                    font-size: 12px;
-                    @include hovarable();
+                    vertical-align: middle;
+                    &:hover{
+                        border: 1px solid rgb(200, 200, 200);
+                    }
                 }
                 .day-name{
                     border-bottom: 1px solid gray;
-                    @include unhovarable();
+                    &:hover{
+                        cursor: default;
+                        border: inherit;
+                        border-bottom: 1px solid gray;
+                    }
                 }
                 .empty-box{
-                    @include unhovarable();
+                    cursor: default;
+                    &:hover{
+                        border: inherit;
+                    }
                 }
             }
             .year-view{
@@ -489,7 +498,6 @@ export default {
                         text-align: center;
                         padding: 10px 0;
                         cursor: pointer;
-                        @include hovarable();
                     }
                     .nextYear{
                         float: right;
@@ -502,18 +510,19 @@ export default {
                     .cyear{
                         float: right;
                         width: 80%;
-                        @include unhovarable();
                     }
                 }
                 .month-box{
                     width: $month_box_width;
+                    line-height: $box-width;
                     display: inline-block;
                     text-align: center;
-                    border: 1px solid transparent;
-                    padding:5px;
-                    margin: 3px;
+                    border: 1px solid rgba(200, 200, 200, 0);
+                    padding:0 5px;
                     cursor: pointer;
-                    @include hovarable();
+                    &:hover{
+                        border: 1px solid rgb(200, 200, 200);
+                    }
                 }
                 
                 
