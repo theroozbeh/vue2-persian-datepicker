@@ -4,6 +4,5 @@ node_js:
   - "7"
   - "6"
   - "5"
-  - "4"
 after_success:
   - codeclimate-test-reporter < ./test/unit/coverage/lcov.info
