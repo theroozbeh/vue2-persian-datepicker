@@ -1,4 +1,5 @@
-# vue persian datepicker [![Build Status](https://travis-ci.org/dyonir/vue2-persian-datepicker.svg?branch=master)](https://travis-ci.org/dyonir/vue2-persian-datepicker) [![Dependency Status](https://gemnasium.com/badges/github.com/dyonir/vue2-persian-datepicker.svg)](https://gemnasium.com/github.com/dyonir/vue2-persian-datepicker)
+# vue persian datepicker 
+[![Build Status](https://travis-ci.org/dyonir/vue2-persian-datepicker.svg?branch=master)](https://travis-ci.org/dyonir/vue2-persian-datepicker) [![Dependency Status](https://gemnasium.com/badges/github.com/dyonir/vue2-persian-datepicker.svg)](https://gemnasium.com/github.com/dyonir/vue2-persian-datepicker) [![Coverage Status](https://coveralls.io/repos/github/dyonir/vue2-persian-datepicker/badge.svg?branch=master)](https://coveralls.io/github/dyonir/vue2-persian-datepicker?branch=master)
 
 > This is a Jalali date picker component for Vue. 
 
