@@ -4,10 +4,16 @@
 
 > این برنامه یک کامپوننت انتخاب تاریخ جلالی می باشد. 
 
+## Demo
+You can see a demo and several examples in this page:
+[Demo & examples]()
+
+
 ## Instalation
 ```bash
 $ npm install vue2-persian-datepicker
 ```
+
 
 ## How to use
 ```js

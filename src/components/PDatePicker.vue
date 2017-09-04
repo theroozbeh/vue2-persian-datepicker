@@ -10,7 +10,7 @@
                :name="name"
                :placeholder="placeholder">
         <transition :name="openTransitionAnimation">
-            <div class='dialog' :class="dialogClass" v-if='isDialogOpen' v-bind:style="{ background: dialogBackColor, color: dialogColor}">
+            <div class='dialog' :class="dialogClass" v-if='isDialogOpen' v-bind:style="{ background: dialogBackgroundColor, color: dialogColor}">
             
                 <div class='day-view' v-if='isDayView'>
                     <div class="dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
@@ -58,7 +58,7 @@ export default {
                 'headerBackgroundColor' :{ default : '#137e95' },
                 'headerColor' : { default : 'white'},
                 'dialogColor' : { default : 'black' },
-                'dialogBackColor' : { default : '#fafafa'},
+                'dialogBackgroundColor' : { default : '#fafafa'},
                 'minimumYear' : { default : 1300, type: Number},
                 'maximumYear' : { default : 1450, type: Number },
                 'value' : { default : '' },
@@ -554,6 +554,18 @@ export default {
     .slide-fade-enter, .slide-fade-leave-to
     {
         transform: translateY(-10px);
+        opacity: 0;
+    }
+    
+    .left-slide-fade-enter-active {
+        transition: all .3s ease-out;
+    }
+    .left-slide-fade-leave-active {
+        transition: all .8s ease-out;
+    }
+    .left-slide-fade-enter, .left-slide-fade-leave-to
+    {
+        transform: translateX(-10px);
         opacity: 0;
     }
 </style>
