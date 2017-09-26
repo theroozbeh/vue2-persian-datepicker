@@ -119,6 +119,11 @@ export default {
         this.openDialog();
     }
   },
+  watch:{
+      value : function(value){
+          this.inputChanged(value);
+      }
+  },
   methods: {
     inputClicked () {
         if(!this.isDialogOpen)

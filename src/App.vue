@@ -5,6 +5,7 @@
         <p>
         {{ date }}
         </p>
+        <button type="button" @click="setDate">تنظیم تاریخ</button>
     </div>
 </template>
 
@@ -17,9 +18,12 @@ export default {
       }
   },
   methods: {
-      dateSelected(value){
-          this.date = value;
-      }
+        dateSelected(value){
+            this.date = value;
+        },
+        setDate(){
+            this.date = '1396/03/05';
+        }
   }
 }
 </script>
