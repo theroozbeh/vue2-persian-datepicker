@@ -1,7 +1,11 @@
 <template>
     <div id="app" dir="rtl">
         <img src="./assets/logo.png">
-        <pdatepicker v-model="date" format-date="yyyy/MM/dd"></pdatepicker>
+        <pdatepicker v-model="date" format-date="yyyy/MM/dd" 
+                     :availableDates='true'
+                     availableDateStart='1396/08/05'
+                     availableDateEnd='1396/08/30'
+                     ></pdatepicker>
         <p>
         {{ date }}
         </p>

@@ -20,14 +20,15 @@
                             <div class="nextMonth" @click='nextMonthClicked'>></div>
                         </div>
                     </div>
-                        
                     <div class='dialog-days'>
                         <span class='day-box day-name' v-for='dayName in dayNames'>
                             {{ dayName }}
                         </span>
-                        <span class='day-box empty-box' v-for='n in firstDayOfMonth'></span><template v-for='n in daysInMonth'><span class='day-box'
-                                v-bind:class='{ chosenDay : ifDayBoxIsChosenDay(n) }'
-                                @click='dayClicked(n)'>{{ n }}</span></template>
+                        <span class='day-box empty-box' v-for='n in firstDayOfMonth'></span><template v-for='n in daysInMonth'>
+                            <span class='day-box'
+                                v-bind:class="{ chosenDay : ifDayBoxIsChosenDay(n), 'disabled-day' : !isDateInRange(n)}"
+                                @click='dayClicked(n)'>{{ n }}</span>
+                        </template>
                     </div>
                 </div>
                 <div class='year-view' v-if='isMonthView'>
@@ -61,6 +62,33 @@ export default {
                 'dialogBackgroundColor' : { default : '#fafafa'},
                 'minimumYear' : { default : 1300, type: Number},
                 'maximumYear' : { default : 1450, type: Number },
+                'availableDates' : { default : false, type: Boolean },
+                'availableDateStart' : { default: '1300/01/01', String,
+                    validator (value){
+                        if(value === '') return true;
+                        let elements = value.split('/');
+                        if(elements.length !== 3) return false;
+                        if(parseInt(elements[0]) < 1300) return false;
+                        let month = parseInt(elements[1]);  
+                        if(month < 1 || month > 12) return false;
+                        let day = parseInt(elements[2]);
+                        if(day < 1 || day > 31) return false;
+                        return true;
+                    }
+                },
+                'availableDateEnd' : { default: '1450/12/29', String,
+                    validator (value){
+                        if(value === '') return true;
+                        let elements = value.split('/');
+                        if(elements.length !== 3) return false;
+                        if(parseInt(elements[0]) < 1300) return false;
+                        let month = parseInt(elements[1]);  
+                        if(month < 1 || month > 12) return false;
+                        let day = parseInt(elements[2]);
+                        if(day < 1 || day > 31) return false;
+                        return true;
+                    }
+                },
                 'value' : { default : '' },
                 'name' : { default : '', type: String },
                 'required' : { default : false, Boolean },
@@ -106,7 +134,17 @@ export default {
         formatedChosenDate : '',
         chosenDay: 1,
         chosenMonth : 1,
-        chosenYear : 1396
+        chosenYear : 1396,
+        startAvailableDateV : {
+            year : 1300,
+            month: 1,
+            day : 1
+        },
+        endAvailableDateV : {
+            year : 1450,
+            month: 12,
+            day : 29
+        }
     }
   },
   mounted(){
@@ -117,6 +155,19 @@ export default {
     }
     if(this.inlineMode){
         this.openDialog();
+    }
+    if(this.availableDates){
+        
+        let elements = this.availableDateStart.split("/");
+        this.startAvailableDateV.year = parseInt(elements[0]);
+        this.startAvailableDateV.month = parseInt(elements[1]);
+        this.startAvailableDateV.day = parseInt(elements[2]);
+        
+        elements = this.availableDateEnd.split("/");
+        this.endAvailableDateV.year = parseInt(elements[0]);
+        this.endAvailableDateV.month = parseInt(elements[1]);
+        this.endAvailableDateV.day = parseInt(elements[2]);
+        
     }
   },
   watch:{
@@ -151,6 +202,21 @@ export default {
             this.isDialogOpen = false;
             this.$emit('closed', this.value);
         }
+    },
+    isDateInRange(day){
+        if(!this.availableDates) return true;
+        let cdate = this.displayingYear * 10000 +
+                (this.displayingMonthNum + 1    ) * 100 + 
+                day;
+        
+        let sdate = this.startAvailableDateV.year * 10000 +
+                (this.startAvailableDateV.month) * 100 + 
+                this.startAvailableDateV.day;
+        
+        let edate = this.endAvailableDateV.year * 10000 +
+                (this.endAvailableDateV.month ) * 100 + 
+                this.endAvailableDateV.day;
+       return (cdate - sdate >= 0) && (cdate - edate <= 0);
     },
     inputCheck(value){
         if(value !== ''){
@@ -250,6 +316,9 @@ export default {
         this.goToMonth(newYear, newMonth, 1);
     },
     dayClicked(day){
+        if(this.availableDates && !this.isDateInRange(day)){
+            return;
+        }
         this.chosenDay = day;
         this.chosenMonth = this.displayingMonthNum + 1;
         this.chosenYear = this.displayingYear;
@@ -478,6 +547,10 @@ export default {
                     &:hover{
                         border: 1px solid rgb(200, 200, 200);
                     }
+                    &.disabled-day{
+                        background-color: #e3e3e3;
+                        cursor: default;
+                    }
                 }
                 .day-name{
                     border-bottom: 1px solid gray;
@@ -535,6 +608,7 @@ export default {
             .chosenDay, .chosenMonth{
                 background-color: lightgray;
             }
+            
         }
         &.inline{
             display: inline-block;
