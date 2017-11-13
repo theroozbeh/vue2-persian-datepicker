@@ -81,14 +81,30 @@
           </div>
       </div>
       <div id='fifth-row' class="row">
+          
           <div class='container'>
               <div class='panel'>
-                <h2>مد داخل خط</h2>
-                <pdatepicker v-model='selected_5' inline-mode='true' ></pdatepicker>
+                <h2>محدود کردن کاربر</h2>
+                <pdatepicker v-model='selected_5'
+                             :availableDates="true"
+                             availableDateStart="1396/08/05"
+                             availableDateEnd="1396/09/10"></pdatepicker>
                 <div class='code'> {{ selected5_code }} </div>
                 <div>
                 تاریخ انتخاب شده: 
                 {{ selected_5 }}</div>
+              </div>
+          </div>
+      </div>
+      <div id='fifth-row' class="row">
+          <div class='container'>
+              <div class='panel'>
+                <h2>مد داخل خط</h2>
+                <pdatepicker v-model='selected_6' inline-mode='true' ></pdatepicker>
+                <div class='code'> {{ selected6_code }} </div>
+                <div>
+                تاریخ انتخاب شده: 
+                {{ selected_6 }}</div>
               </div>
           </div>
       </div>
@@ -120,11 +136,13 @@ export default {
        selected_3 : '',
        selected_4 : '',
        selected_5 : '',
+       selected_6 : '',
        selected1_code: '<pdatepicker v-model="selected_1"></pdatepicker>',
-       selected2_code: '<pdatepicker v-model="selected_1" format-date="yyyy/MMM/dd"></pdatepicker>',
-       selected3_code: '<pdatepicker v-model="selected_1" header-background-color="#FF920A" dialog-background-color="#B29269"></pdatepicker>',
-       selected4_code: '<pdatepicker v-model="selected_1"  open-transition-animation="left-slide-fade"></pdatepicker>',
-       selected5_code: '<pdatepicker v-model="selected_1" inline-mode="true"></pdatepicker>'
+       selected2_code: '<pdatepicker v-model="selected_2" format-date="yyyy/MMM/dd"></pdatepicker>',
+       selected3_code: '<pdatepicker v-model="selected_3" header-background-color="#FF920A" dialog-background-color="#B29269"></pdatepicker>',
+       selected4_code: '<pdatepicker v-model="selected_4"  open-transition-animation="left-slide-fade"></pdatepicker>',
+       selected5_code: '<pdatepicker v-model="selected_5" :availableDates="true" availableDateStart="1396/08/05" availableDateEnd="1396/09/10"></pdatepicker>',
+       selected6_code: '<pdatepicker v-model="selected_6" inline-mode="true"></pdatepicker>'
     }
   }
 }
