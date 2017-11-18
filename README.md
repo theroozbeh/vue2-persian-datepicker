@@ -10,7 +10,15 @@ You can see a demo and several examples in this page:
 [Demo & examples](https://dyonir.github.io/vue2-persian-datepicker/)
 
 
-## Instalation
+## Universal Module Definition(UMD)
+In order to use datepicker without node package manager include these scripts and style sheet:
+```html
+<link rel="stylesheet" href="https://unpkg.com/vue2-persian-datepicker/dist/PDatePicker.css">
+<script type=text/javascript src="https://unpkg.com/vue"></script>
+<script type=text/javascript src="https://unpkg.com/vue2-persian-datepicker/dist/PDatePicker.js"></script>
+```
+
+## NPM Instalation
 ```bash
 $ npm install vue2-persian-datepicker
 ```
