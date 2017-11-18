@@ -13,3 +13,4 @@ yarn-error.log*
 *.sln
 /docs/nbproject/private/
 !/docs/dist/
+!/dist/
