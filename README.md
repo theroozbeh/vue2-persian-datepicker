@@ -74,6 +74,7 @@ export default{
 | availableDates | Boolean | false | If you want limit user to certain range of dates |
 | availableDateStart | String | 1300/01/01 | In case of setting availableDates to true, use this to set start date |
 | availableDateEnd | String | 1450/12/29 | In case of setting availableDates to true, use this to set end date | 
+| disableDatesBeforeToday | Boolean | false | This will disable all dates before today | 
 
 
 ## Events
