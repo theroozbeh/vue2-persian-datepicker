@@ -7,7 +7,8 @@ require('../node_modules/bootstrap-sass/assets/stylesheets/_bootstrap.scss');
 
 Vue.config.productionTip = false
 
-import PDatePicker from '../../src/components/PDatePicker.vue';
+//import PDatePicker from '../../src/components/PDatePicker.vue';
+import PDatePicker from 'vue2-persian-datepicker';
 Vue.component('pdatepicker', PDatePicker);
 
 /* eslint-disable no-new */

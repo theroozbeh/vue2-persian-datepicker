@@ -14,3 +14,6 @@ yarn-error.log*
 /docs/nbproject/private/
 !/docs/dist/
 !/dist/
+/dist/static/css/
+/dist/index.html
+/dist/static/js/
