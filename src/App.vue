@@ -4,7 +4,9 @@
         <pdatepicker v-model="date" format-date="yyyy/MM/dd" 
                      :availableDates='true'
                      availableDateStart='1396/08/05'
-                     availableDateEnd='1396/08/30'
+                     :maximumYear="1398"
+                     :minimumYear="1395"
+                     :disableDatesBeforeToday="true"
                      ></pdatepicker>
         <p>
         {{ date }}

@@ -1,6 +1,5 @@
 <template>
-    <div class="pdatepicker" v-bind:class="{ 'inline' : inlineMode, wrapperClass }"
-               >
+    <div class="pdatepicker" v-bind:class="{ 'inline' : inlineMode, wrapperClass }">
         <input :id="id"
             type="text"
                @click="inputClicked"
@@ -55,65 +54,67 @@
 <script>
 export default {
   name : 'PDatePicker',
-  props : {'placeholder' : { default : 'یک تاریخ را انتخاب کنید', String},
-                'headerBackgroundColor' :{ default : '#137e95' },
-                'headerColor' : { default : 'white'},
-                'dialogColor' : { default : 'black' },
-                'dialogBackgroundColor' : { default : '#fafafa'},
-                'minimumYear' : { default : 1300, type: Number},
-                'maximumYear' : { default : 1450, type: Number },
-                'availableDates' : { default : false, type: Boolean },
-                'availableDateStart' : { default: '1300/01/01', String,
-                    validator (value){
-                        if(value === '') return true;
-                        let elements = value.split('/');
-                        if(elements.length !== 3) return false;
-                        if(parseInt(elements[0]) < 1300) return false;
-                        let month = parseInt(elements[1]);  
-                        if(month < 1 || month > 12) return false;
-                        let day = parseInt(elements[2]);
-                        if(day < 1 || day > 31) return false;
-                        return true;
-                    }
-                },
-                'availableDateEnd' : { default: '1450/12/29', String,
-                    validator (value){
-                        if(value === '') return true;
-                        let elements = value.split('/');
-                        if(elements.length !== 3) return false;
-                        if(parseInt(elements[0]) < 1300) return false;
-                        let month = parseInt(elements[1]);  
-                        if(month < 1 || month > 12) return false;
-                        let day = parseInt(elements[2]);
-                        if(day < 1 || day > 31) return false;
-                        return true;
-                    }
-                },
-                'value' : { default : '' },
-                'name' : { default : '', type: String },
-                'required' : { default : false, Boolean },
-                'id' : { default : '', String},
-                'inputClass': { default : '', String },
-                'dialogClass' :  {default : '', String },
-                'wrapperClass' :  {default : '', String },
-                'initialView' : { default: 'day', String, 
-                        validator (value){
-                            return value === 'day' || value === 'month'
-                        }
-                    },
-                'inlineMode' : { default : false, Boolean },
-                'formatDate' : { default: 'yyyy/MM/dd', String, 
-                        validator (value) {
-                            let elements = value.split("/");
-                            if(elements.length !== 3) return false;
-                            if(elements[0] !== "yyyy" && elements[0] !== "yy") return false;
-                            if(elements[1] !== "M" && elements[1] !== "MM" && elements[1] !== "MMM") return false;
-                            if(elements[2] !== "d" && elements[2] !== "dd") return false;
-                            return true;
-                        }
-                    },
-                'openTransitionAnimation' : { default: 'slide-fade' , String },
-                'persianDigits' : { default : true, String }
+  props : {
+        'placeholder' : { default : 'یک تاریخ را انتخاب کنید', String},
+        'headerBackgroundColor' :{ default : '#137e95' },
+        'headerColor' : { default : 'white'},
+        'dialogColor' : { default : 'black' },
+        'dialogBackgroundColor' : { default : '#fafafa'},
+        'minimumYear' : { default : 1300, type: Number},
+        'maximumYear' : { default : 1450, type: Number },
+        'disableDatesBeforeToday' : { default : false },
+        'availableDates' : { default : false, type: Boolean },
+        'availableDateStart' : { default: '1300/01/01', String,
+            validator (value){
+                if(value === '') return true;
+                let elements = value.split('/');
+                if(elements.length !== 3) return false;
+                if(parseInt(elements[0]) < 1300) return false;
+                let month = parseInt(elements[1]);  
+                if(month < 1 || month > 12) return false;
+                let day = parseInt(elements[2]);
+                if(day < 1 || day > 31) return false;
+                return true;
+            }
+        },
+        'availableDateEnd' : { default: '1450/12/29', String,
+            validator (value){
+                if(value === '') return true;
+                let elements = value.split('/');
+                if(elements.length !== 3) return false;
+                if(parseInt(elements[0]) < 1300) return false;
+                let month = parseInt(elements[1]);  
+                if(month < 1 || month > 12) return false;
+                let day = parseInt(elements[2]);
+                if(day < 1 || day > 31) return false;
+                return true;
+            }
+        },
+        'value' : { default : '' },
+        'name' : { default : '', type: String },
+        'required' : { default : false, Boolean },
+        'id' : { default : '', String},
+        'inputClass': { default : '', String },
+        'dialogClass' :  {default : '', String },
+        'wrapperClass' :  {default : '', String },
+        'initialView' : { default: 'day', String, 
+                validator (value){
+                    return value === 'day' || value === 'month'
+                }
+            },
+        'inlineMode' : { default : false, Boolean },
+        'formatDate' : { default: 'yyyy/MM/dd', String, 
+                validator (value) {
+                    let elements = value.split("/");
+                    if(elements.length !== 3) return false;
+                    if(elements[0] !== "yyyy" && elements[0] !== "yy") return false;
+                    if(elements[1] !== "M" && elements[1] !== "MM" && elements[1] !== "MMM") return false;
+                    if(elements[2] !== "d" && elements[2] !== "dd") return false;
+                    return true;
+                }
+            },
+        'openTransitionAnimation' : { default: 'slide-fade' , String },
+        'persianDigits' : { default : true, String }
   },
   data () {
     return {
@@ -169,6 +170,26 @@ export default {
         this.endAvailableDateV.day = parseInt(elements[2]);
         
     }
+    
+    if(this.disableDatesBeforeToday){
+        this.availableDates = true;
+        let today = new Date();
+        let gToday = this.gregorian_to_jalali(today.getFullYear(), today.getMonth() + 1, today.getDate());
+        let gTodayNum = gToday[0] * 10000 +
+                gToday[1] * 100 + 
+                gToday[2];
+        
+        let sdate = this.startAvailableDateV.year * 10000 +
+                (this.startAvailableDateV.month) * 100 + 
+                this.startAvailableDateV.day;
+        
+        if(sdate - gTodayNum < 0){
+            this.startAvailableDateV.year = gToday[0];
+            this.startAvailableDateV.month = gToday[1] + 1;
+            this.startAvailableDateV.day = gToday[2];
+        }
+    }
+    
   },
   watch:{
       value : function(value){
@@ -206,7 +227,7 @@ export default {
     isDateInRange(day){
         if(!this.availableDates) return true;
         let cdate = this.displayingYear * 10000 +
-                (this.displayingMonthNum + 1    ) * 100 + 
+                (this.displayingMonthNum + 1) * 100 + 
                 day;
         
         let sdate = this.startAvailableDateV.year * 10000 +
@@ -265,7 +286,7 @@ export default {
     },
     goToToday(){
         let today = new Date();
-        this.gtoday = this.gregorian_to_jalali(today.getFullYear(), today.getMonth(), today.getDate());
+        this.gtoday = this.gregorian_to_jalali(today.getFullYear(), today.getMonth() + 1, today.getDate());
         this.goToMonth(this.gtoday[0], this.gtoday[1] - 1, this.gtoday[2]);
         this.chosenDay = this.gtoday[2];
         this.chosenMonth = this.gtoday[1];
@@ -298,20 +319,26 @@ export default {
     preMonthClicked(){
         let newMonth = this.displayingMonthNum - 1;
         let newYear = this.displayingYear;
-        if(newMonth < 0 &&
-                newYear - 1 >= this.minimumYear) {
-            newMonth = 11;
-            newYear--;
+        if(newMonth < 0){
+            if(newYear - 1 >= this.minimumYear) {
+                newMonth = 11;
+                newYear--;
+            } else {
+                newMonth = 0;
+            }
         }
         this.goToMonth(newYear, newMonth, 1);
     },
     nextMonthClicked(){
         let newMonth = this.displayingMonthNum + 1;
         let newYear = this.displayingYear;
-        if(newMonth < 0 &&
-                newYear - 1 >= this.minimumYear) {
-            newMonth = 11;
-            newYear--;
+        if(newMonth > 11){
+            if(newYear + 1 <= this.maximumYear) {
+                newMonth = 0;
+                newYear++;
+            } else {
+                newMonth = 11;
+            }
         }
         this.goToMonth(newYear, newMonth, 1);
     },
