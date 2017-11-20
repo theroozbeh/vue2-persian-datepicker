@@ -11,19 +11,20 @@ You can see a demo and several examples in this page:
 
 
 ## Universal Module Definition(UMD)
-In order to use datepicker without node package manager include these scripts and style sheet ( I recommend using unpkg to include them):
+In order to use datepicker without node package manager include these scripts and style sheet ( I recommend using unpkg ):
+
+For a complete example you can see this [jsFiddle](https://jsfiddle.net/rh2020/zjezzfdk/) .
 ```html
 <link href="https://unpkg.com/vue2-persian-datepicker/dist/vue2-persian-datepicker.css" rel="stylesheet"></script>
 <script type=text/javascript src="https://unpkg.com/vue"></script>
 <script type=text/javascript src="https://unpkg.com/vue2-persian-datepicker/dist/vue2-persian-datepicker.js"></script>
 ```
-Then should register component in vue:
+Then register the component :
 ```js
 Vue.component('pdatepicker', PDatePicker.PDatePicker);
 ```
 
-
-## NPM Instalation
+## NPM
 ```bash
 $ npm install vue2-persian-datepicker
 ```
@@ -35,26 +36,31 @@ import Vue from 'vue'
 import PDatePicker from 'vue2-persian-datepicker'
 Vue.component('pdatepicker', PDatePicker)
 ```
-
-## Use in markup
+## Usage
+After registering the component you can use it in your markup:
 ```html
-<pdatepicker v-on:selected='dateSelected' :value='date'></pdatepicker>
+<pdatepicker></pdatepicker>
 ```
 
+### Basic usage
+
+In most cases you use pdatepicker to provide a persian date picker for your users 
+to pick a date from. So, you need a way to get selected date. You can easily achieve this by syncing a variable.
+
+This is pretty much what you have to get selected date or display a date to a user:
+```html
+<pdatepicker v-model="date"></pdatepicker>
+```
 ```js
 export default{
     data(){
         return {
             date : '1396/6/8'
         };
-    },
-    methods:{
-        dateSelected(value) {
-            this.date = value;
-        }
     }
 }
 ```
+
 ## Properties
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
