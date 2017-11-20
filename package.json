@@ -1,6 +1,6 @@
 {
   "name": "vue2-persian-datepicker",
-  "version": "1.5.17",
+  "version": "1.5.24",
   "description": "Jalali datepicker for vue",
   "author": {
        "name": "Roozbeh Hajizadeh",
@@ -94,9 +94,9 @@
   ],
   "files": [
     "src",
-    "dist/PDatePicker.css",
-    "dist/PDatePicker.css.map",
-    "dist/PDatePicker.js",
-    "dist/PDatePicker.js.map"
+    "dist/vue2-persian-datepicker.css",
+    "dist/vue2-persian-datepicker.css.map",
+    "dist/vue2-persian-datepicker.js",
+    "dist/vue2-persian-datepicker.js.map"
   ]
 }

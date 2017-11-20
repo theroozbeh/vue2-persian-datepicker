@@ -11,11 +11,11 @@ You can see a demo and several examples in this page:
 
 
 ## Universal Module Definition(UMD)
-In order to use datepicker without node package manager include these scripts and style sheet:
+In order to use datepicker without node package manager include these scripts and style sheet ( I recommend using unpkg to include them):
 ```html
-<link rel="stylesheet" href="https://unpkg.com/vue2-persian-datepicker/dist/PDatePicker.css">
+<link href="https://unpkg.com/vue2-persian-datepicker/dist/vue2-persian-datepicker.css" rel="stylesheet"></script>
 <script type=text/javascript src="https://unpkg.com/vue"></script>
-<script type=text/javascript src="https://unpkg.com/vue2-persian-datepicker/dist/PDatePicker.js"></script>
+<script type=text/javascript src="https://unpkg.com/vue2-persian-datepicker/dist/vue2-persian-datepicker.js"></script>
 ```
 
 ## NPM Instalation

@@ -10,7 +10,9 @@ function resolve (dir) {
 
 module.exports = {
   entry: {
-    app: './src/main.js'
+    app: process.env.NODE_ENV === 'production'
+      ? './src/index.js'
+      : './src/main.js'
   },
   output: {
     path: config.build.assetsRoot,
