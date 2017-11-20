@@ -17,21 +17,26 @@ In order to use datepicker without node package manager include these scripts an
 <script type=text/javascript src="https://unpkg.com/vue"></script>
 <script type=text/javascript src="https://unpkg.com/vue2-persian-datepicker/dist/vue2-persian-datepicker.js"></script>
 ```
+Then should register component in vue:
+```js
+Vue.component('pdatepicker', PDatePicker.PDatePicker);
+```
+
 
 ## NPM Instalation
 ```bash
 $ npm install vue2-persian-datepicker
 ```
 
+Then register the component:
 
-## How to use
 ```js
 import Vue from 'vue'
 import PDatePicker from 'vue2-persian-datepicker'
 Vue.component('pdatepicker', PDatePicker)
 ```
 
-You may use the component in your markup
+## Use in markup
 ```html
 <pdatepicker v-on:selected='dateSelected' :value='date'></pdatepicker>
 ```
