@@ -70,7 +70,7 @@ export default{
 | inline-mode | Boolean | false | inline mode |
 | format-date | String | 'yyyy/MM/dd' | formats output date. order of date element should not change |
 | open-transition-animation | String | 'slide-fade' | you can specify a transition for opening and closing dialog.|
-| persianDigits |Boolean | true | outputs persian or english digits |
+| persianDigits |Boolean | true | whether to use persian or english digits |
 | availableDates | Boolean | false | If you want limit user to certain range of dates |
 | availableDateStart | String | 1300/01/01 | In case of setting availableDates to true, use this to set start date |
 | availableDateEnd | String | 1450/12/29 | In case of setting availableDates to true, use this to set end date | 
