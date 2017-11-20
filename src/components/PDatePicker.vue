@@ -15,7 +15,7 @@
                     <div class="dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
                         <div class='dialog-month'>
                             <div class="preMonth" @click='preMonthClicked'><</div>
-                            <div class="monthName"@click='monthNameClicked'>{{ displayingMonth }} {{ displayingYear }}</div>
+                            <div class="monthName"@click='monthNameClicked'>{{ displayingMonth }} {{ numToStr(displayingYear) }}</div>
                             <div class="nextMonth" @click='nextMonthClicked'>></div>
                         </div>
                     </div>
@@ -26,7 +26,7 @@
                         <span class='day-box empty-box' v-for='n in firstDayOfMonth'></span><template v-for='n in daysInMonth'>
                             <span class='day-box'
                                 v-bind:class="{ chosenDay : ifDayBoxIsChosenDay(n), 'disabled-day' : !isDateInRange(n)}"
-                                @click='dayClicked(n)'>{{ n }}</span>
+                                @click='dayClicked(n)'>{{ numToStr(n) }}</span>
                         </template>
                     </div>
                 </div>
@@ -367,6 +367,12 @@ export default {
             this.formatedChosenDate = this.convertDigitsPTE(str);
         this.$emit('selected', this.chosenDate);
         this.$emit('input', this.chosenDate);
+    },
+    numToStr(num){
+        if(this.persianDigits){
+            return this.convertDigitsETP('' + num);
+        }
+        return '' + num;
     },
     nextYearClicked(){
         if(this.displayingYear + 1 <= this.maximumYear) {
