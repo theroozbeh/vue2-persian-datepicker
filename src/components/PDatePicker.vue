@@ -185,7 +185,7 @@ export default {
         
         if(sdate - gTodayNum < 0){
             this.startAvailableDateV.year = gToday[0];
-            this.startAvailableDateV.month = gToday[1] + 1;
+            this.startAvailableDateV.month = gToday[1];
             this.startAvailableDateV.day = gToday[2];
         }
     }
@@ -287,11 +287,10 @@ export default {
     goToToday(){
         let today = new Date();
         this.gtoday = this.gregorian_to_jalali(today.getFullYear(), today.getMonth() + 1, today.getDate());
-        this.goToMonth(this.gtoday[0], this.gtoday[1] - 1, this.gtoday[2]);
         this.chosenDay = this.gtoday[2];
         this.chosenMonth = this.gtoday[1];
         this.chosenYear = this.gtoday[0];
-        this.goToMonth(this.chosenYear, this.chosenMonth, this.chosenDay);
+        this.goToMonth(this.chosenYear, this.chosenMonth - 1, this.chosenDay);
     },
     goToMonth(year, month, day){
         var gfirstOfMonth = this.jalali_to_gregorian(year, month + 1, 1);

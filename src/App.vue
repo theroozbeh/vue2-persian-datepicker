@@ -3,7 +3,7 @@
         <img src="./assets/logo.png">
         <pdatepicker v-model="date" format-date="yyyy/MM/dd" 
                      :availableDates='true'
-                     availableDateStart='1396/08/05'
+                     availableDateEnd='1396/09/25'
                      :maximumYear="1398"
                      :minimumYear="1395"
                      :disableDatesBeforeToday="true"
