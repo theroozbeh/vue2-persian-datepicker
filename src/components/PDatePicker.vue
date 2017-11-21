@@ -34,7 +34,7 @@
                     <div class="dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
                         <div class='dialog-year'>
                             <div class="preYear" @click='preYearClicked'><</div>
-                            <div class="cyear">{{ displayingYear }}</div>
+                            <div class="cyear">{{ numToStr(displayingYear) }}</div>
                             <div class="nextYear" @click='nextYearClicked'>></div>
                         </div>
                     </div>
@@ -499,7 +499,7 @@ export default {
           clear: both;
         }
     }
-    $dialog-width: 300px;
+    $dialog-width: 270px;
     $box-width : $dialog-width / 7;
     $month_box_width : $dialog-width / 3;
     
@@ -512,6 +512,7 @@ export default {
         input{
             text-align: left;
             direction: rtl;
+            width : $dialog-width;
         }
         .dialog{
             position: absolute;
@@ -583,7 +584,12 @@ export default {
                         background-color: #e3e3e3;
                         cursor: default;
                     }
+                    &.chosenDay{
+                        background-color: #f0f0f0;
+                        border: 1px solid #192984;
+                    }
                 }
+                
                 .day-name{
                     border-bottom: 1px solid gray;
                     &:hover{
@@ -633,13 +639,15 @@ export default {
                     &:hover{
                         border: 1px solid rgb(200, 200, 200);
                     }
+                    &.chosenMonth{
+                        background-color: #e3e3e3;
+                        border: 1px solid #192984;
+                    }
                 }
                 
                 
             }
-            .chosenDay, .chosenMonth{
-                background-color: lightgray;
-            }
+            
             
         }
         &.inline{
