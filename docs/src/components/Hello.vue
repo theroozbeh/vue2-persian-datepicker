@@ -121,6 +121,27 @@
               </div>
           </div>
       </div>
+        <div id='donate-row' class="row">
+            <div class='container'>
+              برای زنده نگه داشتن پروژه و ایجاد انگیزه برای پروژه های جدید از ما حمایت کنید. :)
+                <div class='address' dir='ltr'>
+                    <transition name="fade">
+                        <div v-if="!showingAdd">
+                            <img  class='donate_ribbon' @click="showingAdd=true" src="../assets/RibbonDonateBitcoin.png">
+                        </div>
+                        <div v-else class="bit_add">
+                            <h4>Scan:</h4>
+                            <img src="../assets/bitcoin-add.png" title="wallet address">
+                            <h4>Or use:</h4>
+                            <span>
+                                13LbAMWgQD1yWqxdkdEp7RC86GuL8xFEvq
+                            </span>
+                        </div>
+                    </transition>
+                    <div class="clearfix"></div>
+              </div>
+            </div>
+        </div>
   </div>
 </template>
 
@@ -142,7 +163,8 @@ export default {
        selected3_code: '<pdatepicker v-model="selected_3" header-background-color="#FF920A" dialog-background-color="#B29269"></pdatepicker>',
        selected4_code: '<pdatepicker v-model="selected_4"  open-transition-animation="left-slide-fade"></pdatepicker>',
        selected5_code: '<pdatepicker v-model="selected_5" :availableDates="true" availableDateStart="1396/08/05" availableDateEnd="1396/09/10"></pdatepicker>',
-       selected6_code: '<pdatepicker v-model="selected_6" inline-mode="true"></pdatepicker>'
+       selected6_code: '<pdatepicker v-model="selected_6" inline-mode="true"></pdatepicker>',
+       showingAdd : false
     }
   }
 }
@@ -209,6 +231,24 @@ export default {
         font-size: 16px;
         i{
             line-height: 15px;
+        }
+    }
+
+    #donate-row{
+        text-align: center;
+        height: 400px;
+        .address{
+            margin-top: 20px;
+            font-family: Consolas,Menlo,Monaco,Andale Mono WT,Andale Mono,Lucida Console,Lucida Sans Typewriter,DejaVu Sans Mono,Bitstream Vera Sans Mono,Liberation Mono,Nimbus Mono L,Courier New,Courier,monospace;
+         }
+        .donate_ribbon{
+            cursor: pointer;
+        }
+        .bit_add{
+            img{
+                width: 200px;
+            }
+            position: relative;
         }
     }
 </style>
