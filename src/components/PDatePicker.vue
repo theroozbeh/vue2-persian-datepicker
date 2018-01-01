@@ -7,48 +7,55 @@
                @change="inputChanged($event.target.value)"
                :class="inputClass"
                :name="name"
-               :placeholder="placeholder">
-        <transition :name="openTransitionAnimation">
-            <div class='dialog' :class="dialogClass" v-if='isDialogOpen' v-bind:style="{ background: dialogBackgroundColor, color: dialogColor}">
-            
-                <div class='day-view' v-if='isDayView'>
-                    <div class="dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
-                        <div class='dialog-month'>
-                            <div class="preMonth" @click='preMonthClicked'><</div>
-                            <div class="monthName"@click='monthNameClicked'>{{ displayingMonth }} {{ numToStr(displayingYear) }}</div>
-                            <div class="nextMonth" @click='nextMonthClicked'>></div>
+               :placeholder="placeholder"
+               readonly="true">
+        <div v-bind:class="{ 'modal-overlay' : modalMode }" v-if='isDialogOpen' @click='isDialogOpen = false'>
+            <transition :name="openTransitionAnimation">
+                <div class='dialog'
+                    v-show='isDialogOpen'
+                    v-on:click.stop
+                    :class="dialogClass"
+                    v-bind:style="{ background: dialogBackgroundColor, color: dialogColor}">
+                
+                    <div class='day-view' v-if='isDayView'>
+                        <div class="dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
+                            <div class='dialog-month'>
+                                <div class="preMonth" @click='preMonthClicked'>&lt;</div>
+                                <div class="monthName"@click='monthNameClicked'>{{ displayingMonth }} {{ numToStr(displayingYear) }}</div>
+                                <div class="nextMonth" @click='nextMonthClicked'>&gt;</div>
+                            </div>
+                        </div>
+                        <div class='dialog-days'>
+                            <span class='day-box day-name' v-for='dayName in dayNames'>
+                                {{ dayName }}
+                            </span>
+                            <span class='day-box empty-box' v-for='n in firstDayOfMonth'></span><template v-for='n in daysInMonth'>
+                                <span class='day-box'
+                                    v-bind:class="{ chosenDay : ifDayBoxIsChosenDay(n), 'disabled-day' : !isDateInRange(n)}"
+                                    @click='dayClicked(n)'>{{ numToStr(n) }}</span>
+                            </template>
                         </div>
                     </div>
-                    <div class='dialog-days'>
-                        <span class='day-box day-name' v-for='dayName in dayNames'>
-                            {{ dayName }}
-                        </span>
-                        <span class='day-box empty-box' v-for='n in firstDayOfMonth'></span><template v-for='n in daysInMonth'>
-                            <span class='day-box'
-                                v-bind:class="{ chosenDay : ifDayBoxIsChosenDay(n), 'disabled-day' : !isDateInRange(n)}"
-                                @click='dayClicked(n)'>{{ numToStr(n) }}</span>
-                        </template>
-                    </div>
-                </div>
-                <div class='year-view' v-if='isMonthView'>
-                    <div class="dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
-                        <div class='dialog-year'>
-                            <div class="preYear" @click='preYearClicked'><</div>
-                            <div class="cyear">{{ numToStr(displayingYear) }}</div>
-                            <div class="nextYear" @click='nextYearClicked'>></div>
+                    <div class='year-view' v-if='isMonthView'>
+                        <div class="dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
+                            <div class='dialog-year'>
+                                <div class="preYear" @click='preYearClicked'>&lt;</div>
+                                <div class="cyear">{{ numToStr(displayingYear) }}</div>
+                                <div class="nextYear" @click='nextYearClicked'>&gt;</div>
+                            </div>
+                        </div>
+                        <div class='dialog-months'>
+                            <template v-for='(n, i) in monthNames'>
+                                <div class='month-box'
+                                    v-bind:class='{ chosenMonth : ifMonthBoxChosenMonth(i) }'
+                                    @click='monthClicked(i)'>{{ n }}</div>
+                            </template>
                         </div>
                     </div>
-                    <div class='dialog-months'>
-                        <template v-for='(n, i) in monthNames'>
-                            <div class='month-box'
-                                v-bind:class='{ chosenMonth : ifMonthBoxChosenMonth(i) }'
-                                @click='monthClicked(i)'>{{ n }}</div>
-                        </template>
-                    </div>
                 </div>
-            </div>
-        </transition>
-  </div>
+            </transition>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -114,7 +121,8 @@ export default {
                 }
             },
         'openTransitionAnimation' : { default: 'slide-fade' , String },
-        'persianDigits' : { default : true, String }
+        'persianDigits' : { default : true, String },
+        'modalMode' : { default: false, Boolean }
   },
   data () {
     return {
@@ -513,6 +521,8 @@ export default {
             text-align: left;
             direction: rtl;
             width : $dialog-width;
+            background-color: white;
+            color: black;
         }
         .dialog{
             position: absolute;
@@ -657,6 +667,22 @@ export default {
             }
         }
     }
+
+    .modal-overlay{
+        position: fixed;
+        top: 0px;
+        right: 0px;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        .dialog{
+            position: absolute;
+            right: 50%;
+            top: 50%;
+            transform: translate(50%, -50%);
+        }
+    }
+
     .fade-enter-active, .fade-leave-active {
         transition: opacity .5s
     }
