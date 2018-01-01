@@ -9,52 +9,64 @@
                :name="name"
                :placeholder="placeholder"
                readonly="true">
-        <div v-bind:class="{ 'modal-overlay' : modalMode }" v-if='isDialogOpen' @click='isDialogOpen = false'>
-            <transition :name="openTransitionAnimation">
-                <div class='dialog'
-                    v-show='isDialogOpen'
-                    v-on:click.stop
-                    :class="dialogClass"
-                    v-bind:style="{ background: dialogBackgroundColor, color: dialogColor}">
-                
-                    <div class='day-view' v-if='isDayView'>
-                        <div class="dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
-                            <div class='dialog-month'>
-                                <div class="preMonth" @click='preMonthClicked'>&lt;</div>
-                                <div class="monthName"@click='monthNameClicked'>{{ displayingMonth }} {{ numToStr(displayingYear) }}</div>
-                                <div class="nextMonth" @click='nextMonthClicked'>&gt;</div>
-                            </div>
-                        </div>
-                        <div class='dialog-days'>
-                            <span class='day-box day-name' v-for='dayName in dayNames'>
-                                {{ dayName }}
-                            </span>
-                            <span class='day-box empty-box' v-for='n in firstDayOfMonth'></span><template v-for='n in daysInMonth'>
-                                <span class='day-box'
-                                    v-bind:class="{ chosenDay : ifDayBoxIsChosenDay(n), 'disabled-day' : !isDateInRange(n)}"
-                                    @click='dayClicked(n)'>{{ numToStr(n) }}</span>
-                            </template>
+        <transition name='fade' v-if='modalMode'>
+            <div class="modal-overlay"
+                v-if='isDialogOpen'
+                @click='isDialogOpen = false'>
+            </div>
+        </transition>
+        <transition :name="modalMode ? modalOpenTransitionAnimation : openTransitionAnimation">
+            <div
+                v-if="isDialogOpen"
+                v-on:click.stop
+                v-bind:class="[{ 'modal-dialog' : modalMode }, dialogClass , 'dialog']"
+                v-bind:style="{ dialogDynamicStyle }">
+            
+                <div class='day-view' v-if='isDayView'>
+                    <div class="dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
+                        <div class='dialog-month'>
+                            <div class="preMonth" @click='preMonthClicked'>&lt;</div>
+                            <div class="monthName"@click='monthNameClicked'>{{ displayingMonth }} {{ numToStr(displayingYear) }}</div>
+                            <div class="nextMonth" @click='nextMonthClicked'>&gt;</div>
                         </div>
                     </div>
-                    <div class='year-view' v-if='isMonthView'>
-                        <div class="dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
-                            <div class='dialog-year'>
-                                <div class="preYear" @click='preYearClicked'>&lt;</div>
-                                <div class="cyear">{{ numToStr(displayingYear) }}</div>
-                                <div class="nextYear" @click='nextYearClicked'>&gt;</div>
-                            </div>
+                    <div class='dialog-days'>
+                        <div class='day-box day-name' v-for='dayName in dayNames'>
+                            <span>
+                            {{ dayName }}
+                            </span>
                         </div>
-                        <div class='dialog-months'>
-                            <template v-for='(n, i) in monthNames'>
-                                <div class='month-box'
-                                    v-bind:class='{ chosenMonth : ifMonthBoxChosenMonth(i) }'
-                                    @click='monthClicked(i)'>{{ n }}</div>
-                            </template>
-                        </div>
+                        <div class='day-box empty-box' v-for='n in firstDayOfMonth'></div>
+                        <template v-for='n in daysInMonth'>
+                            <div class='day-box'
+                                v-bind:class="{'disabled-day' : !isDateInRange(n) , 'chosen-day' :  ifDayBoxIsChosenDay(n) }"
+                                @click='dayClicked(n)'>
+                                <span class="hover-effect" v-bind:style="{ 'background-color': hoverDayBackColor }"></span>
+                                <span class='num'>
+                                    {{ numToStr(n) }}
+                                </span>
+                                </div>
+                        </template>
                     </div>
                 </div>
-            </transition>
-        </div>
+                <div class='year-view' v-if='isMonthView'>
+                    <div class="dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
+                        <div class='dialog-year'>
+                            <div class="preYear" @click='preYearClicked'>&lt;</div>
+                            <div class="cyear">{{ numToStr(displayingYear) }}</div>
+                            <div class="nextYear" @click='nextYearClicked'>&gt;</div>
+                        </div>
+                    </div>
+                    <div class='dialog-months'>
+                        <template v-for='(n, i) in monthNames'>
+                            <div class='month-box'
+                                v-bind:class='{ chosenMonth : ifMonthBoxChosenMonth(i) }'
+                                @click='monthClicked(i)'>{{ n }}</div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </transition>
     </div>
 </template>
 
@@ -67,6 +79,8 @@ export default {
         'headerColor' : { default : 'white'},
         'dialogColor' : { default : 'black' },
         'dialogBackgroundColor' : { default : '#fafafa'},
+        'hoverDayBackColor' : { default : '#1ad7ff' },
+        'chosenDayBackColor' : { default : '#1ad7ff' },
         'minimumYear' : { default : 1300, type: Number},
         'maximumYear' : { default : 1450, type: Number },
         'disableDatesBeforeToday' : { default : false },
@@ -122,7 +136,8 @@ export default {
             },
         'openTransitionAnimation' : { default: 'slide-fade' , String },
         'persianDigits' : { default : true, String },
-        'modalMode' : { default: false, Boolean }
+        'modalMode' : { default: false, Boolean },
+        'modalOpenTransitionAnimation' : { default: 'scale-fade' , String }
   },
   data () {
     return {
@@ -155,6 +170,20 @@ export default {
             day : 29
         }
     }
+  },
+  computed:{
+        dialogDynamicStyle : () => {
+            return {
+                background: this.dialogBackgroundColor,
+                color: this.dialogColor
+            }
+        },
+        chosenDayDynamicStyle: () => {
+            return {
+                background: this.chosenDayColor
+            }
+        }
+
   },
   mounted(){
     if(this.inputCheck(this.value)){
@@ -498,7 +527,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang='scss' scoped>
     @mixin clearfix() {
         &::after {
@@ -510,6 +538,7 @@ export default {
     $dialog-width: 270px;
     $box-width : $dialog-width / 7;
     $month_box_width : $dialog-width / 3;
+    $font-size: 14px;
     
     .pdatepicker{
         position: relative;
@@ -531,6 +560,10 @@ export default {
             background-color: #fafafa;
             z-index: 100000;
             width: $dialog-width + 2;
+            font-size: 0;
+            span{
+                font-size: $font-size;
+            }
             .dialog-header{
                 width: 100%;
                 box-shadow: 0px 0px 5px 0px gray;
@@ -552,6 +585,7 @@ export default {
                         text-align: center;
                         padding: 10px 0;
                         cursor: pointer;
+                        font-size: $font-size;
                     }
                     .nextMonth{
                         float: right;
@@ -580,31 +614,58 @@ export default {
                 }
                 .day-box{
                     width: $box-width;
+                    height: $box-width;
                     line-height: $box-width;
                     display: inline-block;
                     text-align: center;
                     border: 1px solid transparent;
-                    padding:0 5px;
+                    padding:0;
                     cursor: pointer;
                     vertical-align: middle;
+                    border-radius: 50%;
+                    position: relative;
+                    .hover-effect{
+                        position: absolute;
+                        top: 0px;
+                        right: 0px;
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 50%;
+                        transition: transform 150ms ease-out;
+                        z-index: 1;
+                        transform: scale(0);
+                    }
+                    .num{
+                        z-index: 2;
+                        position: relative;
+                    }
                     &:hover{
-                        border: 1px solid rgb(200, 200, 200);
+                        border: 1px solid transparent;
+                        .hover-effect{
+                            transform: scale(1);
+                        }
                     }
                     &.disabled-day{
                         background-color: #e3e3e3;
                         cursor: default;
+                        .hover-effect{
+                            display: none !important;
+                        }
                     }
-                    &.chosenDay{
-                        background-color: #f0f0f0;
-                        border: 1px solid #192984;
+
+                    &.chosen-day{
+                        .hover-effect{
+                            transform: scale(1) !important;
+                        }
                     }
+                    
+
                 }
                 
                 .day-name{
                     border-bottom: 1px solid gray;
                     &:hover{
                         cursor: default;
-                        border: inherit;
                         border-bottom: 1px solid gray;
                     }
                 }
@@ -624,6 +685,7 @@ export default {
                         text-align: center;
                         padding: 10px 0;
                         cursor: pointer;
+                        font-size: $font-size;
                     }
                     .nextYear{
                         float: right;
@@ -646,6 +708,7 @@ export default {
                     border: 1px solid rgba(200, 200, 200, 0);
                     padding:0 5px;
                     cursor: pointer;
+                    font-size: $font-size;
                     &:hover{
                         border: 1px solid rgb(200, 200, 200);
                     }
@@ -675,42 +738,75 @@ export default {
         width: 100%;
         height: 100%;
         background-color: rgba(0, 0, 0, 0.6);
-        .dialog{
-            position: absolute;
-            right: 50%;
-            top: 50%;
-            transform: translate(50%, -50%);
-        }
+        z-index: 10000;
+    }
+    .modal-dialog{
+        position: fixed !important ;
+        right: 50%;
+        top: 50%;
+        transform: translate(50%, -50%);
+        z-index: 10001;
+        transition: all 150ms ease-out;
     }
 
-    .fade-enter-active, .fade-leave-active {
-        transition: opacity .5s
+    /*** Animations ***/
+    /** Scale Fade **/
+    .fade-enter-active {
+        transition: all 300ms ease-out;
     }
-    .fade-enter, .fade-leave-to {
-        opacity: 0
+    .fade-leave-active {
+        transition: all 300ms ease-out;
     }
-    
+
+    .fade-enter, .fade-leave-to
+    {
+        opacity: 0;
+    }
+
+    .fade-enter-to, .fade-leave{
+        opacity: 1;
+    }
+
+    /** Scale Fade **/
+    .scale-fade-enter-active {
+        transition: all 300ms ease-out;
+    }
+    .scale-fade-leave-active {
+        transition: all 300ms ease-out;
+    }
+
+    .scale-fade-enter, .scale-fade-leave-to
+    {
+        transform: translate(50%, -50%) scale(0.7);
+        opacity: 0;
+    }
+
+    .scale-fade-enter-to{
+        transform: translate(50%, -50%) scale(1.05);
+        opacity: 1;
+    }
+    .scale-fade-leave{
+        transform: translate(50%, -50%) scale(1.1);
+        opacity: 1;
+    }
+
+    /** Slide Fade **/
     .slide-fade-enter-active {
-        transition: all .3s ease-out;
+        transition: all 300ms ease-out;
     }
     .slide-fade-leave-active {
-        transition: all .8s ease-out;
+        transition: all 300ms ease-out;
     }
+
     .slide-fade-enter, .slide-fade-leave-to
     {
         transform: translateY(-10px);
         opacity: 0;
     }
+
+    .slide-fade-enter-to, .slide-fade-leave{
+        transform: translateY(0px);
+        opacity: 1;
+    }
     
-    .left-slide-fade-enter-active {
-        transition: all .3s ease-out;
-    }
-    .left-slide-fade-leave-active {
-        transition: all .8s ease-out;
-    }
-    .left-slide-fade-enter, .left-slide-fade-leave-to
-    {
-        transform: translateX(-10px);
-        opacity: 0;
-    }
 </style>

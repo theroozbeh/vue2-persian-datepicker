@@ -3,9 +3,9 @@
   "version": "1.5.29",
   "description": "Jalali datepicker for vue",
   "author": {
-       "name": "Roozbeh Hajizadeh",
-       "email" : "hajizadeh.roozbeh@gmail.com",
-       "url" : "http://dyon.ir"
+    "name": "Roozbeh Hajizadeh",
+    "email": "hajizadeh.roozbeh@gmail.com",
+    "url": "http://dyon.ir"
   },
   "private": false,
   "main": "./src/index.js",
