@@ -21,50 +21,60 @@
                 v-on:click.stop
                 v-bind:class="[{ 'modal-dialog' : modalMode }, dialogClass , 'dialog']"
                 v-bind:style="{ dialogDynamicStyle }">
-            
-                <div class='day-view' v-if='isDayView'>
-                    <div class="dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
-                        <div class='dialog-month'>
-                            <div class="preMonth" @click='preMonthClicked'>&lt;</div>
-                            <div class="monthName"@click='monthNameClicked'>{{ displayingMonth }} {{ numToStr(displayingYear) }}</div>
-                            <div class="nextMonth" @click='nextMonthClicked'>&gt;</div>
+                <transition name="fade">
+                    <div class='day-view' v-if='isDayView'>
+                        <div class="dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
+                            <div class='dialog-month'>
+                                <div class="preMonth" @click='preMonthClicked'>&lt;</div>
+                                <div class="monthName"@click='monthNameClicked'>{{ displayingMonth }} {{ numToStr(displayingYear) }}</div>
+                                <div class="nextMonth" @click='nextMonthClicked'>&gt;</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class='dialog-days'>
-                        <div class='day-box day-name' v-for='dayName in dayNames'>
-                            <span>
-                            {{ dayName }}
-                            </span>
-                        </div>
-                        <div class='day-box empty-box' v-for='n in firstDayOfMonth'></div>
-                        <template v-for='n in daysInMonth'>
-                            <div class='day-box'
-                                v-bind:class="{'disabled-day' : !isDateInRange(n) , 'chosen-day' :  ifDayBoxIsChosenDay(n) }"
-                                @click='dayClicked(n)'>
-                                <span class="hover-effect" v-bind:style="{ 'background-color': hoverDayBackColor }"></span>
-                                <span class='num'>
-                                    {{ numToStr(n) }}
+                        <div class='dialog-days'>
+                            <div class='day-box day-name' v-for='dayName in dayNames'>
+                                <span>
+                                {{ dayName }}
                                 </span>
-                                </div>
-                        </template>
-                    </div>
-                </div>
-                <div class='year-view' v-if='isMonthView'>
-                    <div class="dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
-                        <div class='dialog-year'>
-                            <div class="preYear" @click='preYearClicked'>&lt;</div>
-                            <div class="cyear">{{ numToStr(displayingYear) }}</div>
-                            <div class="nextYear" @click='nextYearClicked'>&gt;</div>
+                            </div>
+                            <div class='day-box empty-box' v-for='n in firstDayOfMonth'></div>
+                            <template v-for='n in daysInMonth'>
+                                <div class='day-box'
+                                    v-bind:class="{'disabled-day' : !isDateInRange(n) , 'chosen-day' :  ifDayBoxIsChosenDay(n) }"
+                                    @click='dayClicked(n)'>
+                                    <span class="hover-effect"
+                                    v-bind:style="{ 'background-color': !ifDayBoxIsChosenDay(n) ? hoverDayBackColor : chosenDayBackColor  }"></span>
+                                    <span class='num'>
+                                        {{ numToStr(n) }}
+                                    </span>
+                                    </div>
+                            </template>
                         </div>
                     </div>
-                    <div class='dialog-months'>
-                        <template v-for='(n, i) in monthNames'>
-                            <div class='month-box'
-                                v-bind:class='{ chosenMonth : ifMonthBoxChosenMonth(i) }'
-                                @click='monthClicked(i)'>{{ n }}</div>
-                        </template>
+                </transition>
+                <transition name="fade">
+                    <div class='year-view' v-if='isMonthView'>
+                        <div class="dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
+                            <div class='dialog-year'>
+                                <div class="preYear" @click='preYearClicked'>&lt;</div>
+                                <div class="cyear">{{ numToStr(displayingYear) }}</div>
+                                <div class="nextYear" @click='nextYearClicked'>&gt;</div>
+                            </div>
+                        </div>
+                        <div class='dialog-months'>
+                            <template v-for='(n, i) in monthNames'>
+                                <div class='month-box'
+                                    v-bind:class="{ 'chosen-month' : ifMonthBoxChosenMonth(i) }"
+                                    @click='monthClicked(i)'>
+                                    <span class="hover-effect"
+                                    v-bind:style="{ 'background-color': !ifMonthBoxChosenMonth(n) ? hoverDayBackColor : chosenDayBackColor  }"></span>
+                                    <span class="num">
+                                    {{ n }}
+                                    </span>
+                                    </div>
+                            </template>
+                        </div>
                     </div>
-                </div>
+                </transition>
             </div>
         </transition>
     </div>
@@ -79,7 +89,7 @@ export default {
         'headerColor' : { default : 'white'},
         'dialogColor' : { default : 'black' },
         'dialogBackgroundColor' : { default : '#fafafa'},
-        'hoverDayBackColor' : { default : '#1ad7ff' },
+        'hoverDayBackColor' : { default : '#1af7ff' },
         'chosenDayBackColor' : { default : '#1ad7ff' },
         'minimumYear' : { default : 1300, type: Number},
         'maximumYear' : { default : 1450, type: Number },
@@ -136,7 +146,7 @@ export default {
             },
         'openTransitionAnimation' : { default: 'slide-fade' , String },
         'persianDigits' : { default : true, String },
-        'modalMode' : { default: false, Boolean },
+        'modalMode' : { default: true, Boolean },
         'modalOpenTransitionAnimation' : { default: 'scale-fade' , String }
   },
   data () {
@@ -561,6 +571,7 @@ export default {
             z-index: 100000;
             width: $dialog-width + 2;
             font-size: 0;
+            
             span{
                 font-size: $font-size;
             }
@@ -709,12 +720,33 @@ export default {
                     padding:0 5px;
                     cursor: pointer;
                     font-size: $font-size;
+                    position: relative;
+                    .hover-effect{
+                        position: absolute;
+                        top: 0px;
+                        right: 0px;
+                        width: 100%;
+                        height: 100%;
+                        transition: transform 150ms ease-out;
+                        z-index: 1;
+                        transform: scale(0);
+                        z-index: 1;
+                    }
+                    .num{
+                        position: relative;
+                        z-index: 2;
+                    }
                     &:hover{
                         border: 1px solid rgb(200, 200, 200);
+                        .hover-effect{
+                            transform: scale(1);
+                        }
                     }
-                    &.chosenMonth{
-                        background-color: #e3e3e3;
-                        border: 1px solid #192984;
+                    &.chosen-month{
+                        .hover-effect{
+                            transform: scale(1) !important;
+                        }
+                        
                     }
                 }
                 
@@ -746,6 +778,7 @@ export default {
         top: 50%;
         transform: translate(50%, -50%);
         z-index: 10001;
+        box-shadow: 0px 0px 5px 2px rgb(26, 26, 26);
         transition: all 150ms ease-out;
     }
 
@@ -758,9 +791,11 @@ export default {
         transition: all 300ms ease-out;
     }
 
-    .fade-enter, .fade-leave-to
+    .fade-leave-to, .fade-enter
     {
         opacity: 0;
+        position: absolute;
+        top: 0px;
     }
 
     .fade-enter-to, .fade-leave{
