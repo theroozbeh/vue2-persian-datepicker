@@ -121,6 +121,20 @@
               </div>
           </div>
       </div>
+      <div id='sixth-row' class="row">
+          <div class='container'>
+              <div class='panel'>
+                <h2>نمایش دیالوگ بصورت مودال</h2>
+                <br>
+                تاریخ :
+                <pdatepicker v-model='selected_6' :modal-mode="true"></pdatepicker>
+                <div class='code'> {{ selected6_code }} </div>
+                <div>
+                تاریخ انتخاب شده: 
+                {{ selected_6 }}</div>
+              </div>
+          </div>
+      </div>
         <div id='donate-row' class="row">
             <div class='container'>
               برای زنده نگه داشتن پروژه و ایجاد انگیزه برای پروژه های جدید از ما حمایت کنید. :)

@@ -9,7 +9,7 @@
                :name="name"
                :placeholder="placeholder"
                readonly="true">
-        <transition name='fade' v-if='modalMode'>
+        <transition name='fade' v-if='modalMode && isDialogOpen'>
             <div class="modal-overlay"
                 v-if='isDialogOpen'
                 @click='isDialogOpen = false'>
@@ -146,7 +146,7 @@ export default {
             },
         'openTransitionAnimation' : { default: 'slide-fade' , String },
         'persianDigits' : { default : true, String },
-        'modalMode' : { default: true, Boolean },
+        'modalMode' : { default: false, Boolean },
         'modalOpenTransitionAnimation' : { default: 'scale-fade' , String }
   },
   data () {
