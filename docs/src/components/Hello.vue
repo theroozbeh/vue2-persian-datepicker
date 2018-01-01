@@ -35,6 +35,21 @@
               </div>
           </div>
       </div>
+
+      <div id='seventh-row' class="row">
+          <div class='container'>
+              <div class='panel'>
+                <h2>نمایش دیالوگ بصورت مودال</h2>
+                <br>
+                تاریخ :
+                <pdatepicker v-model='selected_7' :modal-mode="true"></pdatepicker>
+                <div class='code'> {{ selected7_code }} </div>
+                <div>
+                تاریخ انتخاب شده: 
+                {{ selected_6 }}</div>
+              </div>
+          </div>
+      </div>
       <div id='third-row' class="row">
           <div class='container'>
               <div class='panel'>
@@ -121,20 +136,6 @@
               </div>
           </div>
       </div>
-      <div id='sixth-row' class="row">
-          <div class='container'>
-              <div class='panel'>
-                <h2>نمایش دیالوگ بصورت مودال</h2>
-                <br>
-                تاریخ :
-                <pdatepicker v-model='selected_6' :modal-mode="true"></pdatepicker>
-                <div class='code'> {{ selected6_code }} </div>
-                <div>
-                تاریخ انتخاب شده: 
-                {{ selected_6 }}</div>
-              </div>
-          </div>
-      </div>
         <div id='donate-row' class="row">
             <div class='container'>
               برای زنده نگه داشتن پروژه و ایجاد انگیزه برای پروژه های جدید از ما حمایت کنید. :)
@@ -172,12 +173,15 @@ export default {
        selected_4 : '',
        selected_5 : '',
        selected_6 : '',
+       selected_7 : '',
        selected1_code: '<pdatepicker v-model="selected_1"></pdatepicker>',
        selected2_code: '<pdatepicker v-model="selected_2" format-date="yyyy/MMM/dd"></pdatepicker>',
        selected3_code: '<pdatepicker v-model="selected_3" header-background-color="#FF920A" dialog-background-color="#B29269"></pdatepicker>',
        selected4_code: '<pdatepicker v-model="selected_4"  open-transition-animation="left-slide-fade"></pdatepicker>',
        selected5_code: '<pdatepicker v-model="selected_5" :availableDates="true" availableDateStart="1396/08/05" availableDateEnd="1396/09/10"></pdatepicker>',
        selected6_code: '<pdatepicker v-model="selected_6" inline-mode="true"></pdatepicker>',
+       selected7_code: '<pdatepicker v-model="selected_7" :modal-mode="true"></pdatepicker>',
+       
        showingAdd : false
     }
   }
