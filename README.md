@@ -68,6 +68,8 @@ export default{
 | placeholder | String | یک تاریخ را انتخاب کنید | Place holder of input |
 | header-color | Color | 'white' | Header text color |
 | header-background-color | Color | '#137e95' | Header background color |
+| hover-day-back-color | Color | '#137e95' | Background color when mouse hovers an element |
+| chosen-day-back-color | Color | '#137e95' | Background color for chosen day |
 | dialog-color | 'black' || Color  Dialog text color |
 | dialog-background-color | Color | '#fafafa' | Dialog background color |
 | minimum-year | Number | 1300 | Minimum selectable year for user |
@@ -87,6 +89,8 @@ export default{
 | availableDateStart | String | 1300/01/01 | In case of setting availableDates to true, use this to set start date |
 | availableDateEnd | String | 1450/12/29 | In case of setting availableDates to true, use this to set end date | 
 | disableDatesBeforeToday | Boolean | false | This will disable all dates before today | 
+| modal-mode | Boolean | false | This will make dialog modal. |
+| modal-open-transition-animation | String | 'scale-fade' | you can specify a transition for opening and closing dialog in modal mode.|
 
 
 ## Events
