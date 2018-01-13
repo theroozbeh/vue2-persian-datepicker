@@ -196,14 +196,6 @@ export default {
 
   },
   mounted(){
-    if(this.inputCheck(this.value)){
-        this.inputChanged(this.value);
-    } else {
-        this.goToToday();
-    }
-    if(this.inlineMode){
-        this.openDialog();
-    }
     if(this.availableDates){
 
         let elements = this.availableDateStart.split("/");
@@ -235,6 +227,19 @@ export default {
             this.startAvailableDateV.month = gToday[1];
             this.startAvailableDateV.day = gToday[2];
         }
+    }
+
+
+    if(this.inputCheck(this.value)){
+        this.inputChanged(this.value);
+    } else if(this.isToDayInRange()){
+        this.goToToday();
+    } else {
+        this.goToMonth(this.startAvailableDateV.year , this.startAvailableDateV.month - 1, this.startAvailableDateV.day);
+    }
+
+    if(this.inlineMode){
+        this.openDialog();
     }
 
   },
@@ -276,6 +281,21 @@ export default {
         let cdate = this.displayingYear * 10000 +
                 (this.displayingMonthNum + 1) * 100 +
                 day;
+
+        let sdate = this.startAvailableDateV.year * 10000 +
+                (this.startAvailableDateV.month) * 100 +
+                this.startAvailableDateV.day;
+
+        let edate = this.endAvailableDateV.year * 10000 +
+                (this.endAvailableDateV.month ) * 100 +
+                this.endAvailableDateV.day;
+       return (cdate - sdate >= 0) && (cdate - edate <= 0);
+    },
+    isToDayInRange(){
+        if(!this.availableDates) return true;
+        let today = new Date();
+        let gtoday = this.gregorian_to_jalali(today.getFullYear(), today.getMonth() + 1, today.getDate());
+        let cdate = gtoday[0] * 10000 + (gtoday[1]) * 100 + gtoday[2];
 
         let sdate = this.startAvailableDateV.year * 10000 +
                 (this.startAvailableDateV.month) * 100 +
@@ -337,6 +357,7 @@ export default {
         this.chosenDay = this.gtoday[2];
         this.chosenMonth = this.gtoday[1];
         this.chosenYear = this.gtoday[0];
+        
         this.goToMonth(this.chosenYear, this.chosenMonth - 1, this.chosenDay);
     },
     goToMonth(year, month, day){
