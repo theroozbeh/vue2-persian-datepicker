@@ -84,70 +84,70 @@
 export default {
   name : 'PDatePicker',
   props : {
-        'placeholder' : { default : 'یک تاریخ را انتخاب کنید', String},
-        'headerBackgroundColor' :{ default : '#137e95' },
-        'headerColor' : { default : 'white'},
-        'dialogColor' : { default : 'black' },
-        'dialogBackgroundColor' : { default : '#fafafa'},
-        'hoverDayBackColor' : { default : '#1af7ff' },
-        'chosenDayBackColor' : { default : '#1ad7ff' },
-        'minimumYear' : { default : 1300, type: Number},
-        'maximumYear' : { default : 1450, type: Number },
-        'disableDatesBeforeToday' : { default : false },
-        'availableDates' : { default : false, type: Boolean },
-        'availableDateStart' : { default: '1300/01/01', String,
-            validator (value){
-                if(value === '') return true;
-                let elements = value.split('/');
-                if(elements.length !== 3) return false;
-                if(parseInt(elements[0]) < 1300) return false;
-                let month = parseInt(elements[1]);  
-                if(month < 1 || month > 12) return false;
-                let day = parseInt(elements[2]);
-                if(day < 1 || day > 31) return false;
-                return true;
-            }
-        },
-        'availableDateEnd' : { default: '1450/12/29', String,
-            validator (value){
-                if(value === '') return true;
-                let elements = value.split('/');
-                if(elements.length !== 3) return false;
-                if(parseInt(elements[0]) < 1300) return false;
-                let month = parseInt(elements[1]);  
-                if(month < 1 || month > 12) return false;
-                let day = parseInt(elements[2]);
-                if(day < 1 || day > 31) return false;
-                return true;
-            }
-        },
-        'value' : { default : '' },
-        'name' : { default : '', type: String },
-        'required' : { default : false, Boolean },
-        'id' : { default : '', String},
-        'inputClass': { default : '', String },
-        'dialogClass' :  {default : '', String },
-        'wrapperClass' :  {default : '', String },
-        'initialView' : { default: 'day', String, 
-                validator (value){
-                    return value === 'day' || value === 'month'
-                }
-            },
-        'inlineMode' : { default : false, Boolean },
-        'formatDate' : { default: 'yyyy/MM/dd', String, 
-                validator (value) {
-                    let elements = value.split("/");
-                    if(elements.length !== 3) return false;
-                    if(elements[0] !== "yyyy" && elements[0] !== "yy") return false;
-                    if(elements[1] !== "M" && elements[1] !== "MM" && elements[1] !== "MMM") return false;
-                    if(elements[2] !== "d" && elements[2] !== "dd") return false;
-                    return true;
-                }
-            },
-        'openTransitionAnimation' : { default: 'slide-fade' , String },
-        'persianDigits' : { default : true, String },
-        'modalMode' : { default: false, Boolean },
-        'modalOpenTransitionAnimation' : { default: 'scale-fade' , String }
+      'placeholder' : { default : 'یک تاریخ را انتخاب کنید', type: String},
+      'headerBackgroundColor' :{ default : '#137e95' , type: String },
+      'headerColor' : { default : 'white', type: String},
+      'dialogColor' : { default : 'black', type: String},
+      'dialogBackgroundColor' : { default : '#fafafa', type: String},
+      'hoverDayBackColor' : { default : '#1af7ff', type: String },
+      'chosenDayBackColor' : { default : '#1ad7ff', type: String },
+      'minimumYear' : { default : 1300, type: Number},
+      'maximumYear' : { default : 1450, type: Number },
+      'disableDatesBeforeToday' : { default : false, type: Boolean },
+      'availableDates' : { default : false, type: Boolean },
+      'availableDateStart' : { default: '1300/01/01', type: String,
+          validator (value){
+              if(value === '') return true;
+              let elements = value.split('/');
+              if(elements.length !== 3) return false;
+              if(parseInt(elements[0]) < 1300) return false;
+              let month = parseInt(elements[1]);
+              if(month < 1 || month > 12) return false;
+              let day = parseInt(elements[2]);
+              if(day < 1 || day > 31) return false;
+              return true;
+          }
+      },
+      'availableDateEnd' : { default: '1450/12/29', type: String,
+          validator (value){
+              if(value === '') return true;
+              let elements = value.split('/');
+              if(elements.length !== 3) return false;
+              if(parseInt(elements[0]) < 1300) return false;
+              let month = parseInt(elements[1]);
+              if(month < 1 || month > 12) return false;
+              let day = parseInt(elements[2]);
+              if(day < 1 || day > 31) return false;
+              return true;
+          }
+      },
+      'value' : { default : '' },
+      'name' : { default : '', type : String },
+      'required' : { default : false,type : Boolean },
+      'id' : { default : '', type : String},
+      'inputClass': { default : '', type :String },
+      'dialogClass' :  {default : '',type : String },
+      'wrapperClass' :  {default : '',type : String },
+      'initialView' : { default: 'day',type : String,
+              validator (value){
+                  return value === 'day' || value === 'month'
+              }
+          },
+      'inlineMode' : { default : false, type :Boolean },
+      'formatDate' : { default: 'yyyy/MM/dd',type : String,
+              validator (value) {
+                  let elements = value.split("/");
+                  if(elements.length !== 3) return false;
+                  if(elements[0] !== "yyyy" && elements[0] !== "yy") return false;
+                  if(elements[1] !== "M" && elements[1] !== "MM" && elements[1] !== "MMM") return false;
+                  if(elements[2] !== "d" && elements[2] !== "dd") return false;
+                  return true;
+              }
+          },
+      'openTransitionAnimation' : { default: 'slide-fade' ,type : String },
+      'persianDigits' : { default : true,type : Boolean },
+      'modalMode' : { default: false,type : Boolean },
+      'modalOpenTransitionAnimation' : { default: 'scale-fade' ,type : String }
   },
   data () {
     return {
@@ -199,44 +199,44 @@ export default {
     if(this.inputCheck(this.value)){
         this.inputChanged(this.value);
     } else {
-        this.goToToday();  
+        this.goToToday();
     }
     if(this.inlineMode){
         this.openDialog();
     }
     if(this.availableDates){
-        
+
         let elements = this.availableDateStart.split("/");
         this.startAvailableDateV.year = parseInt(elements[0]);
         this.startAvailableDateV.month = parseInt(elements[1]);
         this.startAvailableDateV.day = parseInt(elements[2]);
-        
+
         elements = this.availableDateEnd.split("/");
         this.endAvailableDateV.year = parseInt(elements[0]);
         this.endAvailableDateV.month = parseInt(elements[1]);
         this.endAvailableDateV.day = parseInt(elements[2]);
-        
+
     }
-    
+
     if(this.disableDatesBeforeToday){
         this.availableDates = true;
         let today = new Date();
         let gToday = this.gregorian_to_jalali(today.getFullYear(), today.getMonth() + 1, today.getDate());
         let gTodayNum = gToday[0] * 10000 +
-                gToday[1] * 100 + 
+                gToday[1] * 100 +
                 gToday[2];
-        
+
         let sdate = this.startAvailableDateV.year * 10000 +
-                (this.startAvailableDateV.month) * 100 + 
+                (this.startAvailableDateV.month) * 100 +
                 this.startAvailableDateV.day;
-        
+
         if(sdate - gTodayNum < 0){
             this.startAvailableDateV.year = gToday[0];
             this.startAvailableDateV.month = gToday[1];
             this.startAvailableDateV.day = gToday[2];
         }
     }
-    
+
   },
   watch:{
       value : function(value){
@@ -274,15 +274,15 @@ export default {
     isDateInRange(day){
         if(!this.availableDates) return true;
         let cdate = this.displayingYear * 10000 +
-                (this.displayingMonthNum + 1) * 100 + 
+                (this.displayingMonthNum + 1) * 100 +
                 day;
-        
+
         let sdate = this.startAvailableDateV.year * 10000 +
-                (this.startAvailableDateV.month) * 100 + 
+                (this.startAvailableDateV.month) * 100 +
                 this.startAvailableDateV.day;
-        
+
         let edate = this.endAvailableDateV.year * 10000 +
-                (this.endAvailableDateV.month ) * 100 + 
+                (this.endAvailableDateV.month ) * 100 +
                 this.endAvailableDateV.day;
        return (cdate - sdate >= 0) && (cdate - edate <= 0);
     },
@@ -295,7 +295,7 @@ export default {
                 let day = parseInt(this.convertDigitsPTE(els[2]));
                 if(isNaN(month)){
                     month = this.monthNames.indexOf(els[1]) + 1;
-                } 
+                }
                 if(!isNaN(year) && !isNaN(day) && month !== -1){
                     if(month < 1 || month > 12) return false;
                     if(month <= 6 && (day < 1 || day > 31)) return false;
@@ -309,7 +309,7 @@ export default {
         return false;
     },
     inputChanged(value){
-        if(this.inputCheck(value)) {  
+        if(this.inputCheck(value)) {
             let els = value.split("/");
             let year = parseInt(this.convertDigitsPTE(els[0]));
             let month = parseInt(this.convertDigitsPTE(els[1]));
@@ -341,23 +341,23 @@ export default {
     },
     goToMonth(year, month, day){
         var gfirstOfMonth = this.jalali_to_gregorian(year, month + 1, 1);
-        
+
         var firstOfMonth = new Date(gfirstOfMonth[0], gfirstOfMonth[1] - 1, gfirstOfMonth[2] + 1);
         this.firstDayOfMonth = (firstOfMonth.getDay()) %7 ;
         this.daysInMonth = this.gatDaysInMonth(month);
         this.displayingMonthNum = month;
-        
+
         let yearch = this.displayingYear !== year;
         let monthch = this.displayingMonth !== this.monthNames[month];
-        
+
         this.displayingYear = year;
         this.displayingMonth = this.monthNames[month];
-        
+
         if(monthch)
             this.$emit('monthChanged', this.value);
         if(yearch)
             this.$emit('yearChanged', this.value);
-        
+
     },
     gatDaysInMonth(monthNumber){
         return monthNumber <= 5 ? 31 : 30;
@@ -427,7 +427,7 @@ export default {
         }
     },
     preYearClicked(){
-        if(this.displayingYear - 1 >= this.minimumYear) { 
+        if(this.displayingYear - 1 >= this.minimumYear) {
             this.displayingYear--;
             this.$emit('yearChanged', this.value);
         }
@@ -490,7 +490,7 @@ export default {
         }
         gy2=(gm > 2)?(gy+1):gy;
         days=(365*gy) +(parseInt(( gy2 + 3 ) / 4)) -(parseInt((gy2+99)/100)) +(parseInt((gy2+399)/400)) -80 +gd +g_d_m[gm-1];
-        jy += 33 * (parseInt( days / 12053)); 
+        jy += 33 * (parseInt( days / 12053));
         days%=12053;
         jy += 4*(parseInt(days/1461));
         days%=1461;
@@ -531,7 +531,7 @@ export default {
             if(gd <= v)break;
             gd-=v;
         }
-        return [gy,gm,gd]; 
+        return [gy,gm,gd];
     }
   }
 }
@@ -549,7 +549,7 @@ export default {
     $box-width : $dialog-width / 7;
     $month_box_width : $dialog-width / 3;
     $font-size: 14px;
-    
+
     .pdatepicker{
         position: relative;
         display: inline-block;
@@ -571,7 +571,7 @@ export default {
             z-index: 100000;
             width: $dialog-width + 2;
             font-size: 0;
-            
+
             span{
                 font-size: $font-size;
             }
@@ -585,7 +585,7 @@ export default {
                 margin: 0px;
                 width: 0px;
                 height: 0px;
-                @include clearfix();                       
+                @include clearfix();
             }
             .day-view{
                 text-align: right;
@@ -669,10 +669,10 @@ export default {
                             transform: scale(1) !important;
                         }
                     }
-                    
+
 
                 }
-                
+
                 .day-name{
                     border-bottom: 1px solid gray;
                     &:hover{
@@ -746,14 +746,14 @@ export default {
                         .hover-effect{
                             transform: scale(1) !important;
                         }
-                        
+
                     }
                 }
-                
-                
+
+
             }
-            
-            
+
+
         }
         &.inline{
             display: inline-block;
@@ -843,5 +843,5 @@ export default {
         transform: translateY(0px);
         opacity: 1;
     }
-    
+
 </style>
