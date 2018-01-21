@@ -7,6 +7,7 @@
                      :availableDates="true"
                      availableDateStart="1396/08/05"
                      availableDateEnd="1396/09/10"
+                     v-on:selected='dateSelected'
                      ></pdatepicker>
         <p>
         {{ date }}
@@ -25,7 +26,7 @@ export default {
   },
   methods: {
         dateSelected(value){
-            this.date = value;
+            console.log(JSON.stringify(value));
         },
         setDate(){
             this.date = '1396/03/05';

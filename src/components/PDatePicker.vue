@@ -441,7 +441,7 @@ export default {
             this.formatedChosenDate = this.convertDigitsETP(str);
         else
             this.formatedChosenDate = this.convertDigitsPTE(str);
-        this.$emit('selected', this.chosenDate);
+        this.$emit('selected', { year: this.chosenYear, month: this.chosenMonth, day: this.chosenDay});
         this.$emit('input', this.chosenDate);
     },
     numToStr(num){

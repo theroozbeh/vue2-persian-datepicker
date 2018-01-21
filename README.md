@@ -94,14 +94,14 @@ export default{
 
 
 ## Events
-| event | date | description |
+| event | Parameters | description |
 |-------|------|-------------|
-| opened || The picker's dialog is opened |
-| closed || The picker's dialog is closed |
-| monthChanged || Month page has changed |
-| yearChanged || Year page has changed |
-| selected | Date | A date has been selected |
-| input | Date | Input changed |
+| opened | Date String | The picker's dialog is opened |
+| closed | Date String | The picker's dialog is closed |
+| monthChanged | Date String | Month page has changed |
+| yearChanged | Date String | Year page has changed |
+| selected | Date Object | A date has been selected|
+| input | Date String  | Input changed |
   
 ## Get selected date
 Using v-model you can sync a value to selected date. Or, you can listen to selected event and get selected date.
