@@ -8,7 +8,7 @@
                :class="inputClass"
                :name="name"
                :placeholder="placeholder"
-               readonly="true">
+               :readonly="inputDisabled">
         <transition name='fade' v-if='modalMode && isDialogOpen'>
             <div class="modal-overlay"
                 v-if='isDialogOpen'
@@ -134,6 +134,7 @@ export default {
               }
           },
       'inlineMode' : { default : false, type :Boolean },
+      'inputDisabled' : { default : true, type :Boolean },
       'formatDate' : { default: 'yyyy/MM/dd',type : String,
               validator (value) {
                   let elements = value.split("/");

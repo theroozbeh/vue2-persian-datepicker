@@ -7,6 +7,7 @@
                      :availableDates="true"
                      availableDateStart="1396/08/05"
                      availableDateEnd="1396/09/10"
+                     :input-disabled="true"
                      v-on:selected='dateSelected'
                      ></pdatepicker>
         <p>

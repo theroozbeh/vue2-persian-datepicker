@@ -80,6 +80,7 @@ export default{
 | input-class | String | '' | css class for input element |
 | dialog class | String | '' | css class for dialog element |
 | wrapper-class | String | '' | css class wrapper element of component |
+| input-disabled | Boolean | true | for responsive reasons input is disabled by default but you can enable it if you need to.  |
 | initial-view | String | 'day' | Initial view of component (month or day) |
 | inline-mode | Boolean | false | inline mode |
 | format-date | String | 'yyyy/MM/dd' | formats output date. order of date element should not change |
