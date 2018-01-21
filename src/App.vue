@@ -2,7 +2,7 @@
     <div id="app" dir="rtl">
         <img src="./assets/logo.png">
         <pdatepicker v-model="date" format-date="yyyy/MM/dd" 
-                     :maximumYear="1398"
+                     :maximumYear="1450"
                      :minimumYear="1395"
                      :availableDates="true"
                      availableDateStart="1396/08/05"

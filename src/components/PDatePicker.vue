@@ -381,7 +381,16 @@ export default {
 
     },
     gatDaysInMonth(monthNumber){
+        if(monthNumber == 11){
+            return this.isLeapYear(this.displayingYear) ? 30 : 29;
+        }
         return monthNumber <= 5 ? 31 : 30;
+    },
+    isLeapYear(year){
+        let rm = year % 33;
+        if(year <= 1342)
+            return rm == 1 || rm == 5 || rm == 9 || rm == 13 || rm == 17 || rm == 21 || rm == 26 || rm == 30;
+        return rm == 1 || rm == 5 || rm == 9 || rm == 13 || rm == 17 || rm == 22 || rm == 26 || rm == 30;
     },
     preMonthClicked(){
         let newMonth = this.displayingMonthNum - 1;
