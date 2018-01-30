@@ -243,6 +243,14 @@ export default {
         this.openDialog();
     }
 
+    if (!this.inlineMode && !this.modalMode){
+        document.documentElement.addEventListener('click', this.onExit, false);
+    }
+  },
+  beforeDestroy: function () {
+    if (!this.inlineMode && !this.modalMode){
+        document.documentElement.removeEventListener('click', this.onExit, false);
+    }
   },
   watch:{
       value : function(value){
@@ -482,6 +490,10 @@ export default {
         let outDay = elements[2] === 'dd' && day < 10 ? '0' + day : day;
         return outYear + "/" + outMonth + "/" + outDay;
     },
+    onExit: function (ev) {
+        if (!this.$el.contains(ev.target))
+            this.closeDialog();
+    },    
     /**
      * This function convert english digits to persian ones.
      * @param {String} unconverted string
