@@ -81,7 +81,7 @@ export default{
 | dialog class | String | '' | css class for dialog element |
 | wrapper-class | String | '' | css class wrapper element of component |
 | input-disabled | Boolean | true | for responsive reasons input is disabled by default but you can enable it if you need to.  |
-| initial-view | String | 'day' | Initial view of component (month or day) |
+| initial-view | String | 'day' | Initial view of component (year or month or day) |
 | inline-mode | Boolean | false | inline mode |
 | format-date | String | 'yyyy/MM/dd' | formats output date. order of date element should not change |
 | open-transition-animation | String | 'slide-fade' | you can specify a transition for opening and closing dialog.|
