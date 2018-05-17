@@ -8,7 +8,7 @@
                :class="inputClass"
                :name="name"
                :placeholder="placeholder"
-               readonly="true">
+               :readonly="inputDisabled">
         <transition name='fade' v-if='modalMode && isDialogOpen'>
             <div class="modal-overlay"
                 v-if='isDialogOpen'
@@ -26,7 +26,7 @@
                         <div class="dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
                             <div class='dialog-month'>
                                 <div class="preMonth" @click='preMonthClicked'>&lt;</div>
-                                <div class="monthName"@click='monthNameClicked'>{{ displayingMonth }} {{ numToStr(displayingYear) }}</div>
+                                <div class="monthName"@click='goToMonthSelect'>{{ displayingMonth }} {{ numToStr(displayingYear) }}</div>
                                 <div class="nextMonth" @click='nextMonthClicked'>&gt;</div>
                             </div>
                         </div>
@@ -46,17 +46,17 @@
                                     <span class='num'>
                                         {{ numToStr(n) }}
                                     </span>
-                                    </div>
+                                </div>
                             </template>
                         </div>
                     </div>
                 </transition>
                 <transition name="fade">
-                    <div class='year-view' v-if='isMonthView'>
+                    <div class='month-view' v-if='isMonthView'>
                         <div class="dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
                             <div class='dialog-year'>
                                 <div class="preYear" @click='preYearClicked'>&lt;</div>
-                                <div class="cyear">{{ numToStr(displayingYear) }}</div>
+                                <div class="cyear" @click="goToYearSelect">{{ numToStr(displayingYear) }}</div>
                                 <div class="nextYear" @click='nextYearClicked'>&gt;</div>
                             </div>
                         </div>
@@ -70,9 +70,27 @@
                                     <span class="num">
                                     {{ n }}
                                     </span>
-                                    </div>
+                                </div>
                             </template>
                         </div>
+                    </div>
+                </transition>
+                <transition name="fade">
+                    <div class='year-view'
+                        v-if='isYearView'>
+                        <template v-for='n in (cMaximumYear - cMinimumYear + 1)'>
+                            <div class='year-box'
+                                :id="'year-' + (n + cMinimumYear - 1)"
+                                v-bind:class="{ 'chosen-year' : ifYearBoxChosenYear(n + cMinimumYear - 1) }"
+                                @click="yearClicked(n + cMinimumYear - 1)">
+                                <span class="hover-effect"
+                                    v-bind:style="{ 'background-color': !ifYearBoxChosenYear(n + cMinimumYear - 1) ? hoverDayBackColor : chosenDayBackColor  }">
+                                </span>
+                                <span class="num">
+                                {{ numToStr(n + cMinimumYear - 1) }}
+                                </span>
+                            </div>
+                        </template>
                     </div>
                 </transition>
             </div>
@@ -134,6 +152,7 @@ export default {
               }
           },
       'inlineMode' : { default : false, type :Boolean },
+      'inputDisabled' : { default : true, type :Boolean },
       'formatDate' : { default: 'yyyy/MM/dd',type : String,
               validator (value) {
                   let elements = value.split("/");
@@ -154,6 +173,7 @@ export default {
         isDialogOpen : false,
         isDayView : true,
         isMonthView : false,
+        isYearView: false,
         dayNames : ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'],
         monthNames : ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور' ,'مهر' ,'آبان' ,'آذر', 'دی' ,'بهمن', 'اسفند'],
         dayInThisMonth: 1,
@@ -182,16 +202,28 @@ export default {
     }
   },
   computed:{
-        dialogDynamicStyle : () => {
+        dialogDynamicStyle(){
             return {
                 background: this.dialogBackgroundColor,
                 color: this.dialogColor
             }
         },
-        chosenDayDynamicStyle: () => {
+        chosenDayDynamicStyle(){
             return {
                 background: this.chosenDayColor
             }
+        },
+        cMinimumYear(){
+            if(this.startAvailableDateV.year > this.minimumYear) {
+                return this.startAvailableDateV.year;
+            }
+            return this.minimumYear;
+        },
+        cMaximumYear(){
+            if(this.endAvailableDateV.year < this.maximumYear) {
+                return this.endAvailableDateV.year;
+            }
+            return this.maximumYear;
         },
 
         inputWrapperClass(){
@@ -211,19 +243,11 @@ export default {
 
 
             return inputClass;
-
         }
+
 
   },
   mounted(){
-    if(this.inputCheck(this.value)){
-        this.inputChanged(this.value);
-    } else {
-        this.goToToday();
-    }
-    if(this.inlineMode){
-        this.openDialog();
-    }
     if(this.availableDates){
 
         let elements = this.availableDateStart.split("/");
@@ -257,6 +281,29 @@ export default {
         }
     }
 
+
+
+
+    if(this.inputCheck(this.value)){
+        this.inputChanged(this.value);
+    } else if(this.isToDayInRange()){
+        this.goToToday();
+    } else {
+        this.goToMonth(this.startAvailableDateV.year , this.startAvailableDateV.month - 1, this.startAvailableDateV.day);
+    }
+
+    if(this.inlineMode){
+        this.openDialog();
+    }
+
+    if (!this.inlineMode && !this.modalMode){
+        document.documentElement.addEventListener('click', this.onExit, false);
+    }
+  },
+  beforeDestroy: function () {
+    if (!this.inlineMode && !this.modalMode){
+        document.documentElement.removeEventListener('click', this.onExit, false);
+    }
   },
   watch:{
       value : function(value){
@@ -279,15 +326,24 @@ export default {
         if(this.initialView === 'day'){
             this.isDayView = true;
             this.isMonthView = false;
-        } else {
+            this.isYearView = false;
+        } else if(this.initialView === 'month') {
             this.isDayView = false;
             this.isMonthView = true;
+            this.isYearView = false;
+        } else {
+            this.isDayView = false;
+            this.isMonthView = false;
+            this.isYearView = true;
         }
         this.$emit('opened', this.value);
     },
     closeDialog(){
         if(!this.inlineMode){
             this.isDialogOpen = false;
+            this.isDayView = false;
+            this.isMonthView = false;
+            this.isYearView = false;
             this.$emit('closed', this.value);
         }
     },
@@ -296,6 +352,21 @@ export default {
         let cdate = this.displayingYear * 10000 +
                 (this.displayingMonthNum + 1) * 100 +
                 day;
+
+        let sdate = this.startAvailableDateV.year * 10000 +
+                (this.startAvailableDateV.month) * 100 +
+                this.startAvailableDateV.day;
+
+        let edate = this.endAvailableDateV.year * 10000 +
+                (this.endAvailableDateV.month ) * 100 +
+                this.endAvailableDateV.day;
+       return (cdate - sdate >= 0) && (cdate - edate <= 0);
+    },
+    isToDayInRange(){
+        if(!this.availableDates) return true;
+        let today = new Date();
+        let gtoday = this.gregorian_to_jalali(today.getFullYear(), today.getMonth() + 1, today.getDate());
+        let cdate = gtoday[0] * 10000 + (gtoday[1]) * 100 + gtoday[2];
 
         let sdate = this.startAvailableDateV.year * 10000 +
                 (this.startAvailableDateV.month) * 100 +
@@ -321,7 +392,7 @@ export default {
                     if(month <= 6 && (day < 1 || day > 31)) return false;
                     if(month > 6 && (day < 1 || day > 30)) return false;
                     if(year < 1300) year += 1300;
-                    if(year < this.minimumYear || year > this.maximumYear) return false;
+                    if(year < this.cMinimumYear || year > this.cMaximumYear) return false;
                     return true;
                 }
             }
@@ -351,12 +422,16 @@ export default {
         return this.chosenYear === this.displayingYear &&
                 this.chosenMonth === month + 1;
     },
+    ifYearBoxChosenYear(year){
+        return this.chosenYear === year;
+    },
     goToToday(){
         let today = new Date();
         this.gtoday = this.gregorian_to_jalali(today.getFullYear(), today.getMonth() + 1, today.getDate());
         this.chosenDay = this.gtoday[2];
         this.chosenMonth = this.gtoday[1];
         this.chosenYear = this.gtoday[0];
+
         this.goToMonth(this.chosenYear, this.chosenMonth - 1, this.chosenDay);
     },
     goToMonth(year, month, day){
@@ -377,16 +452,24 @@ export default {
             this.$emit('monthChanged', this.value);
         if(yearch)
             this.$emit('yearChanged', this.value);
-
     },
     gatDaysInMonth(monthNumber){
+        if(monthNumber == 11){
+            return this.isLeapYear(this.displayingYear) ? 30 : 29;
+        }
         return monthNumber <= 5 ? 31 : 30;
+    },
+    isLeapYear(year){
+        let rm = year % 33;
+        if(year <= 1342)
+            return rm == 1 || rm == 5 || rm == 9 || rm == 13 || rm == 17 || rm == 21 || rm == 26 || rm == 30;
+        return rm == 1 || rm == 5 || rm == 9 || rm == 13 || rm == 17 || rm == 22 || rm == 26 || rm == 30;
     },
     preMonthClicked(){
         let newMonth = this.displayingMonthNum - 1;
         let newYear = this.displayingYear;
         if(newMonth < 0){
-            if(newYear - 1 >= this.minimumYear) {
+            if(newYear - 1 >= this.cMinimumYear) {
                 newMonth = 11;
                 newYear--;
             } else {
@@ -399,7 +482,7 @@ export default {
         let newMonth = this.displayingMonthNum + 1;
         let newYear = this.displayingYear;
         if(newMonth > 11){
-            if(newYear + 1 <= this.maximumYear) {
+            if(newYear + 1 <= this.cMaximumYear) {
                 newMonth = 0;
                 newYear++;
             } else {
@@ -421,8 +504,25 @@ export default {
     monthClicked(month){
         this.displayingMonthNum = month;
         this.isMonthView = false;
+        this.isYearView = false;
         this.isDayView = true;
         this.goToMonth(this.displayingYear, this.displayingMonthNum, 1);
+    },
+    yearClicked(year){
+        this.displayingYear = year;
+        this.isMonthView = true;
+        this.isYearView = false;
+        this.isDayView = false;
+        this.goToMonthSelect();
+    },
+    goToYearSelect(event){
+        this.isMonthView = false;
+        this.isDayView = false;
+        this.isYearView = true;
+        this.$nextTick(function () {
+            let target = this.$el.querySelector('#year-' + this.displayingYear);
+            target.parentNode.scrollTop = target.offsetTop - target.parentNode.offsetTop;
+        });
     },
     updateInput(){
         this.chosenDate = this.chosenYear + "/" + this.chosenMonth + "/" + this.chosenDay;
@@ -431,7 +531,7 @@ export default {
             this.formatedChosenDate = this.convertDigitsETP(str);
         else
             this.formatedChosenDate = this.convertDigitsPTE(str);
-        this.$emit('selected', this.chosenDate);
+        this.$emit('selected', { year: this.chosenYear, month: this.chosenMonth, day: this.chosenDay});
         this.$emit('input', this.chosenDate);
     },
     numToStr(num){
@@ -441,18 +541,18 @@ export default {
         return '' + num;
     },
     nextYearClicked(){
-        if(this.displayingYear + 1 <= this.maximumYear) {
+        if(this.displayingYear + 1 <= this.cMaximumYear) {
             this.displayingYear++;
             this.$emit('yearChanged', this.value);
         }
     },
     preYearClicked(){
-        if(this.displayingYear - 1 >= this.minimumYear) {
+        if(this.displayingYear - 1 >= this.cMinimumYear) {
             this.displayingYear--;
             this.$emit('yearChanged', this.value);
         }
     },
-    monthNameClicked(){
+    goToMonthSelect(){
         this.isDayView = false;
         this.isMonthView = true;
         this.chosenMonth = this.displayingMonthNum + 1;
@@ -470,6 +570,10 @@ export default {
         else if(elements[1] === 'MMM') outMonth = this.monthNames[month - 1];
         let outDay = elements[2] === 'dd' && day < 10 ? '0' + day : day;
         return outYear + "/" + outMonth + "/" + outDay;
+    },
+    onExit(ev) {
+        if (!this.$el.contains(ev.target))
+            this.closeDialog();
     },
     /**
      * This function convert english digits to persian ones.
@@ -707,7 +811,7 @@ export default {
                     }
                 }
             }
-            .year-view{
+            .month-view{
                 text-align: center;
                 .dialog-year{
                     width: 100%;
@@ -766,14 +870,51 @@ export default {
                         .hover-effect{
                             transform: scale(1) !important;
                         }
-
                     }
                 }
-
-
             }
-
-
+            .year-view{
+                width: 100%;
+                height: 250px;
+                overflow: scroll;
+                overflow-x: hidden;
+                .year-box{
+                    display: inline-block;
+                    text-align: center;
+                    padding: 10px 0;
+                    cursor: pointer;
+                    font-size: $font-size;
+                    width: 25%;
+                    position: relative;
+                    border: 1px solid rgba(200, 200, 200, 0);
+                    .hover-effect{
+                        position: absolute;
+                        top: 0px;
+                        right: 0px;
+                        width: 100%;
+                        height: 100%;
+                        transition: transform 150ms ease-out;
+                        z-index: 1;
+                        transform: scale(0);
+                        z-index: 1;
+                    }
+                    .num{
+                        position: relative;
+                        z-index: 2;
+                    }
+                    &:hover{
+                        border: 1px solid rgb(200, 200, 200);
+                        .hover-effect{
+                            transform: scale(1);
+                        }
+                    }
+                    &.chosen-year{
+                        .hover-effect{
+                            transform: scale(1) !important;
+                        }
+                    }
+                }
+            }
         }
         &.inline{
             display: inline-block;

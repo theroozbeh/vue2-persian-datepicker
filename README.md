@@ -80,7 +80,8 @@ export default{
 | input-class | String | '' | css class for input element |
 | dialog class | String | '' | css class for dialog element |
 | wrapper-class | String | '' | css class wrapper element of component |
-| initial-view | String | 'day' | Initial view of component (month or day) |
+| input-disabled | Boolean | true | for responsive reasons input is disabled by default but you can enable it if you need to.  |
+| initial-view | String | 'day' | Initial view of component (year or month or day) |
 | inline-mode | Boolean | false | inline mode |
 | format-date | String | 'yyyy/MM/dd' | formats output date. order of date element should not change |
 | open-transition-animation | String | 'slide-fade' | you can specify a transition for opening and closing dialog.|
@@ -94,14 +95,14 @@ export default{
 
 
 ## Events
-| event | date | description |
+| event | Parameters | description |
 |-------|------|-------------|
-| opened || The picker's dialog is opened |
-| closed || The picker's dialog is closed |
-| monthChanged || Month page has changed |
-| yearChanged || Year page has changed |
-| selected | Date | A date has been selected |
-| input | Date | Input changed |
+| opened | Date String | The picker's dialog is opened |
+| closed | Date String | The picker's dialog is closed |
+| monthChanged | Date String | Month page has changed |
+| yearChanged | Date String | Year page has changed |
+| selected | Date Object | A date has been selected|
+| input | Date String  | Input changed |
   
 ## Get selected date
 Using v-model you can sync a value to selected date. Or, you can listen to selected event and get selected date.

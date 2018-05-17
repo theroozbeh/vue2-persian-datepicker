@@ -2,9 +2,11 @@
     <div id="app" dir="rtl">
         <img src="./assets/logo.png">
         <pdatepicker v-model="date" format-date="yyyy/MM/dd" 
-                     :maximumYear="1398"
-                     :minimumYear="1395"
-                     :disableDatesBeforeToday="true"
+                     :maximumYear="1450"
+                     :minimumYear="1390"
+                     :availableDates="true"
+                     :input-disabled="true"
+                     v-on:selected='dateSelected'
                      ></pdatepicker>
         <p>
         {{ date }}
@@ -23,7 +25,7 @@ export default {
   },
   methods: {
         dateSelected(value){
-            this.date = value;
+            console.log(JSON.stringify(value));
         },
         setDate(){
             this.date = '1396/03/05';

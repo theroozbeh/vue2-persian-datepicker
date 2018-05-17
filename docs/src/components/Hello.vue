@@ -115,7 +115,7 @@
           <div class='container'>
               <div class='panel'>
                 <h2>مد داخل خط</h2>
-                <pdatepicker v-model='selected_6' inline-mode='true' ></pdatepicker>
+                <pdatepicker v-model='selected_6' :inline-mode='true' ></pdatepicker>
                 <div class='code'> {{ selected6_code }} </div>
                 <div>
                 تاریخ انتخاب شده: 
