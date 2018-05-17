@@ -1,5 +1,5 @@
 <template>
-    <div class="pdatepicker" v-bind:class="{ 'inline' : inlineMode, wrapperClass }">
+    <div class="pdatepicker" :class="inputWrapperClass">
         <input :id="id"
             type="text"
                @click="inputClicked"
@@ -224,6 +224,25 @@ export default {
                 return this.endAvailableDateV.year;
             }
             return this.maximumYear;
+        },
+
+        inputWrapperClass(){
+            let inputClass = '';
+
+            if (this.inlineMode){
+                inputClass = 'inline';
+            }
+
+            if (this.wrapperClass){
+                inputClass = this.wrapperClass;
+            }
+
+            if (this.inlineMode && this.wrapperClass){
+                inputClass = `inline ${this.wrapperClass}`;
+            }
+
+
+            return inputClass;
         }
 
 
@@ -412,7 +431,7 @@ export default {
         this.chosenDay = this.gtoday[2];
         this.chosenMonth = this.gtoday[1];
         this.chosenYear = this.gtoday[0];
-        
+
         this.goToMonth(this.chosenYear, this.chosenMonth - 1, this.chosenDay);
     },
     goToMonth(year, month, day){
@@ -555,7 +574,7 @@ export default {
     onExit(ev) {
         if (!this.$el.contains(ev.target))
             this.closeDialog();
-    },    
+    },
     /**
      * This function convert english digits to persian ones.
      * @param {String} unconverted string
