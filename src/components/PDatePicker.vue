@@ -1,5 +1,5 @@
 <template>
-    <div class="pdatepicker" v-bind:class="{ 'inline' : inlineMode, wrapperClass }">
+    <div class="pdatepicker" :class="inputWrapperClass">
         <input :id="id"
             type="text"
                @click="inputClicked"
@@ -192,6 +192,26 @@ export default {
             return {
                 background: this.chosenDayColor
             }
+        },
+
+        inputWrapperClass(){
+            let inputClass = '';
+
+            if (this.inlineMode){
+                inputClass = 'inline';
+            }
+
+            if (this.wrapperClass){
+                inputClass = this.wrapperClass;
+            }
+
+            if (this.inlineMode && this.wrapperClass){
+                inputClass = `inline ${this.wrapperClass}`;
+            }
+
+
+            return inputClass;
+
         }
 
   },
