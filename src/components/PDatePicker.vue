@@ -1,5 +1,5 @@
 <template>
-    <div class="pdatepicker" v-bind:class="{ 'inline' : inlineMode, wrapperClass }">
+    <div class="pdatepicker" v-bind:class="[ {'inline' : inlineMode}, wrapperClass ]">
         <input :id="id"
             type="text"
                @click="inputClicked"
