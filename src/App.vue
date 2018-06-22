@@ -6,6 +6,7 @@
                      :minimumYear="1390"
                      :availableDates="true"
                      :input-disabled="true"
+                     wrapperClass="hello-class"
                      v-on:selected='dateSelected'
                      ></pdatepicker>
         <p>

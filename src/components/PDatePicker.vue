@@ -19,18 +19,18 @@
             <div
                 v-if="isDialogOpen"
                 v-on:click.stop
-                v-bind:class="[{ 'modal-dialog' : modalMode }, dialogClass , 'dialog']"
+                v-bind:class="[{ 'modal-dialog' : modalMode }, dialogClass , 'pdatepicker-dialog']"
                 v-bind:style="{ dialogDynamicStyle }">
                 <transition name="fade">
                     <div class='day-view' v-if='isDayView'>
-                        <div class="dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
-                            <div class='dialog-month'>
+                        <div class="pdatepicker-dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
+                            <div class='pdatepicker-dialog-month'>
                                 <div class="preMonth" @click='preMonthClicked'>&lt;</div>
                                 <div class="monthName"@click='goToMonthSelect'>{{ displayingMonth }} {{ numToStr(displayingYear) }}</div>
                                 <div class="nextMonth" @click='nextMonthClicked'>&gt;</div>
                             </div>
                         </div>
-                        <div class='dialog-days'>
+                        <div class='pdatepicker-dialog-days'>
                             <div class='day-box day-name' v-for='dayName in dayNames'>
                                 <span>
                                 {{ dayName }}
@@ -53,14 +53,14 @@
                 </transition>
                 <transition name="fade">
                     <div class='month-view' v-if='isMonthView'>
-                        <div class="dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
-                            <div class='dialog-year'>
+                        <div class="pdatepicker-dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
+                            <div class='pdatepicker-dialog-year'>
                                 <div class="preYear" @click='preYearClicked'>&lt;</div>
                                 <div class="cyear" @click="goToYearSelect">{{ numToStr(displayingYear) }}</div>
                                 <div class="nextYear" @click='nextYearClicked'>&gt;</div>
                             </div>
                         </div>
-                        <div class='dialog-months'>
+                        <div class='pdatepicker-dialog-months'>
                             <template v-for='(n, i) in monthNames'>
                                 <div class='month-box'
                                     v-bind:class="{ 'chosen-month' : ifMonthBoxChosenMonth(i) }"
@@ -668,7 +668,7 @@ export default {
             background-color: white;
             color: black;
         }
-        .dialog{
+        .pdatepicker-dialog{
             position: absolute;
             border: 1px solid gray;
             box-shadow: 0px 0px 2px 0px gray;
@@ -680,7 +680,7 @@ export default {
             span{
                 font-size: $font-size;
             }
-            .dialog-header{
+            .pdatepicker-dialog-header{
                 width: 100%;
                 box-shadow: 0px 0px 5px 0px gray;
                 @include clearfix;
@@ -694,7 +694,7 @@ export default {
             }
             .day-view{
                 text-align: right;
-                .dialog-month{
+                .pdatepicker-dialog-month{
                     width: 100%;
                     div{
                         display: inline-block;
@@ -725,7 +725,7 @@ export default {
                         }
                     }
                 }
-                .dialog-week{
+                .pdatepicker-dialog-week{
                     width: 100%;
                 }
                 .day-box{
@@ -794,7 +794,7 @@ export default {
             }
             .month-view{
                 text-align: center;
-                .dialog-year{
+                .pdatepicker-dialog-year{
                     width: 100%;
                     div{
                         display: inline-block;
@@ -899,7 +899,7 @@ export default {
         }
         &.inline{
             display: inline-block;
-            .dialog{
+            .pdatepicker-dialog{
                  position: static;
             }
         }
