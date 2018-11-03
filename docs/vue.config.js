@@ -1,3 +1,3 @@
 module.exports = {
-    baseUrl: '//dyonir.github.io/vue2-persian-datepicker/dist/static/'
+    baseUrl: '//dyonir.github.io/vue2-persian-datepicker/dist/'
 }
