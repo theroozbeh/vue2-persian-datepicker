@@ -34,6 +34,7 @@ export default {
     },
     setDate(){
         this.date = '1396/03/05';
+        
     },
     }
 }

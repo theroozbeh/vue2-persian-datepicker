@@ -388,8 +388,8 @@ export default {
                 month = this.monthNames.indexOf(els[1]) + 1;
             }
             this.goToMonth(year, month - 1, day);
-            this.updateInput();
-            this.dayClicked(day);
+            // this.updateInput();
+            // this.dayClicked(day);
         }
     },
     ifDayBoxIsChosenDay(day){
@@ -471,7 +471,8 @@ export default {
         this.goToMonth(newYear, newMonth, 1);
     },
     dayClicked(day){
-        if(this.availableDates && !this.isDateInRange(day)){
+        if(!this.isDialogOpen ||
+            (this.availableDates && !this.isDateInRange(day))){
             return;
         }
         this.chosenDay = day;
