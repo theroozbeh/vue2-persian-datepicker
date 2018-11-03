@@ -177,7 +177,7 @@ export default {
        selected1_code: '<pdatepicker v-model="selected_1"></pdatepicker>',
        selected2_code: '<pdatepicker v-model="selected_2" format-date="yyyy/MMM/dd"></pdatepicker>',
        selected3_code: '<pdatepicker v-model="selected_3" header-background-color="#FF920A" dialog-background-color="#B29269"></pdatepicker>',
-       selected4_code: '<pdatepicker v-model="selected_4"  open-transition-animation="left-slide-fade"></pdatepicker>',
+       selected4_code: '<pdatepicker v-model="selected_4" open-transition-animation="left-slide-fade"></pdatepicker>',
        selected5_code: '<pdatepicker v-model="selected_5" :availableDates="true" availableDateStart="1396/08/05" availableDateEnd="1396/09/10"></pdatepicker>',
        selected6_code: '<pdatepicker v-model="selected_6" inline-mode="true"></pdatepicker>',
        selected7_code: '<pdatepicker v-model="selected_7" :modal-mode="true"></pdatepicker>',

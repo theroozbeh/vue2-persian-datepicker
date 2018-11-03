@@ -166,7 +166,7 @@ export default {
       'openTransitionAnimation' : { default: 'slide-fade' ,type : String },
       'persianDigits' : { default : true,type : Boolean },
       'modalMode' : { default: false,type : Boolean },
-      'modalOpenTransitionAnimation' : { default: 'scale-fade' ,type : String }
+      'modalOpenTransitionAnimation' : { default: 'scale-fade', type : String }
   },
   data () {
     return {
@@ -225,8 +225,6 @@ export default {
             }
             return this.maximumYear;
         }
-
-
   },
   mounted(){
     if(this.availableDates){
@@ -506,14 +504,13 @@ export default {
         });
     },
     updateInput(){
-        this.chosenDate = this.chosenYear + "/" + this.chosenMonth + "/" + this.chosenDay;
         let str = this.toFormatDate(this.chosenYear, this.chosenMonth, this.chosenDay);
         if(this.persianDigits)
             this.formatedChosenDate = this.convertDigitsETP(str);
         else
             this.formatedChosenDate = this.convertDigitsPTE(str);
         this.$emit('selected', { year: this.chosenYear, month: this.chosenMonth, day: this.chosenDay});
-        this.$emit('input', this.chosenDate);
+        this.$emit('input', str);
     },
     numToStr(num){
         if(this.persianDigits){
