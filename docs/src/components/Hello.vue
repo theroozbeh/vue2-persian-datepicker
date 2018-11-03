@@ -161,8 +161,6 @@
 </template>
 
 <script>
-    
-    
 export default {
   name: 'hello',
   data () {

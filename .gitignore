@@ -17,3 +17,5 @@ yarn-error.log*
 /dist/static/css/
 /dist/index.html
 /dist/static/js/
+
+docs2
