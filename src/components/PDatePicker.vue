@@ -410,7 +410,7 @@ export default {
         this.chosenDay = this.gtoday[2];
         this.chosenMonth = this.gtoday[1];
         this.chosenYear = this.gtoday[0];
-        
+
         this.goToMonth(this.chosenYear, this.chosenMonth - 1, this.chosenDay);
     },
     goToMonth(year, month, day){
@@ -553,7 +553,7 @@ export default {
     onExit(ev) {
         if (!this.$el.contains(ev.target))
             this.closeDialog();
-    },    
+    },
     /**
      * This function convert english digits to persian ones.
      * @param {String} unconverted string
@@ -667,7 +667,7 @@ export default {
             color: black;
         }
         .pdatepicker-dialog{
-            position: absolute;
+            position: static;
             border: 1px solid gray;
             box-shadow: 0px 0px 2px 0px gray;
             background-color: #fafafa;
