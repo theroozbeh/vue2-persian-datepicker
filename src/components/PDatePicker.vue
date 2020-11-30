@@ -26,7 +26,7 @@
                         <div class="pdatepicker-dialog-header" v-bind:style='{background : headerBackgroundColor, color: headerColor}'>
                             <div class='pdatepicker-dialog-month'>
                                 <div class="preMonth" @click='preMonthClicked'>&lt;</div>
-                                <div class="monthName"@click='goToMonthSelect'>{{ displayingMonth }} {{ numToStr(displayingYear) }}</div>
+                                <div class="monthName" @click='goToMonthSelect'>{{ displayingMonth }} {{ numToStr(displayingYear) }}</div>
                                 <div class="nextMonth" @click='nextMonthClicked'>&gt;</div>
                             </div>
                         </div>
